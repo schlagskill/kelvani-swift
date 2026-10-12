@@ -1,0 +1,9 @@
+{
+  "manifest_version": 3,
+  "name": "KelvaniSwift",
+  "description": "Lokale Arbeitsbereiche für deine Tabs. Speichern, suchen, sichern und wieder öffnen.",
+  "version": "0.1.0",
+  "permissions": ["storage", "tabs"],
+  "action": { "default_title": "KelvaniSwift öffnen" },
+  "background": { "service_worker": "background.js", "type": "module" }
+}
