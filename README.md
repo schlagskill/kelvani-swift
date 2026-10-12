@@ -1,48 +1,54 @@
 # KelvaniSwift
 
-KelvaniSwift sichert Tab-Arbeitsbereiche lokal und öffnet sie in neuen Fenstern. Version 0.2.1 bietet Bereichskarten, Suche, Tab-Liste mit Detailansicht, Einzel- und Mehrfachauswahl, Umbenennen/Entfernen mit Rückgängig sowie eine getrennte Ansicht offener Fenster. Darstellung: Hell, Dunkel oder System.
+Kostenlose, quelloffene Tab-Arbeitsbereiche für Chrome und Edge. **Version 0.3.0:** Ein Klick auf das Erweiterungssymbol öffnet ein kompaktes Popup über der aktuellen Website. Über den Pfeil oben rechts öffnest du den großen Manager in einem eigenen Browser-Tab. Beide Ansichten verwenden dieselben lokalen Daten.
 
-Kostenlos, MIT-lizenziert, ohne Konto oder Server. Oberfläche auf Deutsch. Dies ist eine installierbare **Entwicklungsversion**, noch kein Chrome-Web-Store-/Edge-Add-ons-Release.
+Installierbare Entwicklungsversion unter MIT-Lizenz, ohne Konto, Server oder Cloud-Sync. Kein Store-Release und keine vollständige Workona-Funktionsgleichheit.
 
-## In Chrome oder Edge installieren
+## Installation und Aktualisierung
 
-1. Repository als ZIP herunterladen und entpacken (oder das vorbereitete Erweiterungspaket verwenden).
-2. `chrome://extensions` bzw. `edge://extensions` öffnen und **Entwicklermodus** einschalten.
-3. **Entpackt laden** wählen und den Ordner mit `manifest.json` auswählen.
-4. Das Erweiterungssymbol anklicken: Der lokale Arbeitsbereich-Manager öffnet sich in einem eigenen Tab.
+1. Erweiterungspaket entpacken; der gewählte Ordner muss `manifest.json` enthalten.
+2. `chrome://extensions` oder `edge://extensions` öffnen und Entwicklermodus aktivieren.
+3. **Entpackt laden** wählen und diesen Ordner auswählen.
+4. KelvaniSwift an die Browserleiste anheften und das Symbol anklicken.
+5. Im Popup schnell suchen, Links öffnen oder ein Fenster sichern. Der Pfeil **In großem Tab öffnen** öffnet bzw. fokussiert die große Ansicht und übernimmt den ausgewählten Arbeitsbereich.
 
-Zum Aktualisieren zuerst ein Backup exportieren, Dateien im selben Erweiterungsordner austauschen und die Erweiterung auf der Erweiterungsseite neu laden. Ein neuer Installationsordner kann eine andere Erweiterungs-ID und getrennte Daten erzeugen.
+Bei einer bestehenden Installation: zuerst unter Einstellungen ein Backup exportieren, Dateien **im bisherigen Installationsordner** ersetzen und die Erweiterung auf der Erweiterungsseite neu laden. Ein anderer Ordner kann eine neue Erweiterungs-ID und getrennte Daten erzeugen. Bestehende v1-Daten und Backups bleiben lesbar.
 
-## Datenschutz und Rechte
+## Arbeitsbereiche und Tabs
 
-`storage` und `tabs`: zum lokalen Speichern sowie Lesen von Titeln/URLs der Browserfenster. Private Fenster werden nicht gesichert. Interne, unsichere und doppelte URLs werden ausgelassen. Manuelle Sicherung ist kein Live-Sync. Öffnen schließt keine vorhandenen Tabs. Gesichert werden URLs, Titel, Pins, Zeitpunkt und Fensterquelle, keine Seiteninhalte oder Anmeldungen.
+- Leere Bereiche anlegen, umbenennen, duplizieren, favorisieren sowie Farbe und Symbol wählen.
+- Im großen Manager Bereiche per Ziehen sortieren; alternativ einen Bereich fokussieren und Alt + Pfeil hoch/runter verwenden. Favoriten und übrige Bereiche erscheinen getrennt.
+- Tabs am Griff rechts ziehen: vor einen anderen Tab, ans Ende der Liste oder auf einen Arbeitsbereich in der Seitenleiste. Alternativ Checkboxen markieren und **Verschieben** verwenden. Pfeil-Buttons sortieren einzelne Tabs im großen Manager auch per Tastatur.
+- Links hinzufügen, ausgewählte Links entfernen, Bereiche löschen. Entfernen betrifft gespeicherte Daten, niemals offene Browser-Tabs. Leere Bereiche bleiben erhalten. Rückgängig ist nach solchen Änderungen acht Sekunden verfügbar und überschreibt keine zwischenzeitlichen Änderungen anderer Swift-Ansichten.
+- Zentrale Suche nach Bereichsnamen, Tab-Titeln und URLs. Strg/⌘ + K fokussiert die Suche, Esc hebt Suche und Auswahl auf bzw. beendet Ziehen.
+- Deutsch/Englisch und Hell/Dunkel/System unter Einstellungen. Backup-Export enthält auch Darstellungs- und Spracheinstellungen. Import führt Bereiche zusammen, behält aktuelle Einstellungen und verlangt eine Bestätigung.
 
-Alle App-Assets und Schriften sind lokal. Keine Telemetrie, Remote-Scripts, Remote-Fonts oder Cloud-Synchronisierung. Der Markenlink öffnet kelvani.net nur auf Klick. Das Projekt benötigt keine gehostete Domain. Normales Öffnen einer gespeicherten Website kontaktiert diese Website.
+**Gespeichert und offen sind getrennt:** Die Ansicht Offene Tabs zeigt unterstützte Web-Tabs normaler Browserfenster. Ein Klick fokussiert den echten Tab. Ein Fenster oder eine Auswahl lässt sich neu sichern, zu einem Bereich hinzufügen oder bewusst als Ersatz seiner Sicherung speichern. Die Vorschau zeigt Anzahl und ausgelassene Tabs. Es gibt keinen automatischen Abgleich.
 
-Beim Deinstallieren gehen Erweiterungsdaten verloren: vorher exportieren. Backups enthalten persönliche Links/Notizen bzw. Tab-URLs und sollten privat bleiben. Es werden nur HTTP(S)-URLs ohne eingebettete Zugangsdaten akzeptiert.
+**Öffnen ohne unnötige Duplikate:** Bereits offene HTTP(S)-Adressen in normalen, nicht privaten Fenstern werden wiederverwendet. Fehlende Links öffnen im aktuellen normalen Fenster; ist es nicht verfügbar, entsteht ein neues Fenster. URLs werden vollständig verglichen, einschließlich Parametern und Fragmenten. Bereits offene Tabs werden nicht umsortiert oder geschlossen. Pins neu erstellter Tabs werden übernommen. Teilfehler lassen sich erneut versuchen; Swift prüft dabei wieder, welche Links inzwischen offen sind.
 
-## Verhalten und Grenzen
+Die Tab-Wiederherstellung läuft im Erweiterungs-Hintergrund weiter, wenn das Popup beim Fensterwechsel geschlossen wird. Ein lokaler Ergebnisbericht macht Teilfehler beim nächsten Öffnen sichtbar. Gleichzeitige Öffnen-Anfragen beider Ansichten werden nacheinander verarbeitet.
 
-100 Arbeitsbereiche, je 200 unterschiedliche Web-Tabs, Import bis 2 MB. Bestehende v0.1-Backups bleiben gültig. Import führt Daten zusammen, überspringt identische Bereiche und erhält verschiedene Versionen mit gleicher ID. Gespeicherte Tabs lassen sich entfernen; mindestens einer bleibt. Zum vollständigen Entfernen Verwalten verwenden. Teilfehler beim Öffnen werden angezeigt; erneuter Versuch öffnet nur fehlgeschlagene URLs im bereits erstellten Fenster.
+## Datenschutz und Grenzen
 
-## Entwickeln und prüfen
+Nur `storage` und `tabs` werden benötigt. Keine Host-Berechtigungen, Telemetrie, Remote-Scripts, Remote-Schriften, Seiteninhalte oder Anmeldedaten. Alle Assets werden lokal geladen. Eine geöffnete Website wird erst beim bewussten Öffnen ihrer URL kontaktiert. Private, interne und unsichere URLs sowie eingebettete Zugangsdaten werden nicht gesichert.
 
-Keine Bibliotheksinstallation und kein Build-Schritt nötig. Node.js 22+:
+Gespeichert werden URLs, Titel, Pins, Sicherungszeitpunkt, Fensterquelle, Bereichseigenschaften und Einstellungen. Der letzte Öffnen-Bericht bleibt lokal bis zur nächsten Öffnen-Aktion; Fehler daraus werden höchstens einen Tag lang erneut angezeigt. Backups enthalten persönliche Webadressen. Vor Deinstallation exportieren, da Browser-Erweiterungsdaten dabei verloren gehen.
 
-```sh
-npm test
-```
+Maximal 100 Bereiche, je 200 unterschiedliche Web-Tabs, URLs bis 8192 Zeichen und Importdateien bis 2 MB. Kapazitäts- und Schreibfehler brechen Änderungen ab; Verschieben in einen vollen Bereich verliert keine Quell-Tabs. Import überspringt identische Bereiche; verschiedene Versionen mit gleicher ID bekommen eine eigene ID.
 
-HTTP-Vorschau: `python -m http.server 8080 --bind 127.0.0.1`, dann http://127.0.0.1:8080 öffnen. Die Vorschau nutzt localStorage, Erweiterungen chrome.storage.local. Vorschau- und Erweiterungsdaten sind getrennt. HTML direkt vom Dateisystem zu öffnen wird nicht unterstützt. Web Locks serialisiert Änderungen mehrerer App-Tabs.
+## Entwickeln und Prüfen
 
-Automatisierte Tests prüfen Datenlogik und Speicherung sowie Browser-API-Abläufe mit Test-Doubles. UI-Abläufe werden in der HTTP-Browser-Vorschau geprüft. Das ersetzt keinen echten Installationstest in Chrome und Edge. Die verbleibenden nativen Prüfungen und Ergebnisse stehen in [TESTING.md](TESTING.md).
+Kein Build und keine Laufzeitbibliotheken erforderlich. Node.js 22+: `npm test`.
 
-## Herkunft und Assets
+HTTP-Vorschau: im Repository `python -m http.server 8080 --bind 127.0.0.1`, danach `http://127.0.0.1:8080/index.html` oder `popup.html` öffnen. Die Vorschau nutzt getrennte localStorage-Daten, die Erweiterung chrome.storage.local. Browser-Aktionen sind in der Vorschau deaktiviert; der Vergrößern-Button wechselt dort im selben Vorschau-Tab in die große Ansicht. Beispieldaten werden nur auf ausdrücklichen Klick in Einstellungen geladen. Dateisystem-URLs werden nicht unterstützt.
 
-Eigenständiger Kelvani-Code für schlagskill mit OpenAI-Coding-Unterstützung. Design nach dem Kelvani-Brandbook v3; Original-Logo vom Projektinhaber, unverändert. Keine fremde Repository-Historie und keine fremden Spendenlinks.
+Web Locks serialisiert Änderungen von Popup und Manager. API-Tests mit Test-Doubles und HTTP-Oberflächenprüfungen bestätigen keinen echten Chrome-/Edge-Installationstest. Ausgeführte Prüfungen und verbleibende native Prüfschritte: [TESTING.md](TESTING.md).
 
-Inter: https://rsms.me/inter/ · SIL Open Font License 1.1, siehe assets/Inter-OFL.txt. Code: MIT, siehe LICENSE. Die Logo-Datei wird für die Marke mitgeliefert; die Code-Lizenz ist keine Erlaubnis, als Kelvani aufzutreten. Erweiterungsicons sind hinterlegt; Store-Assets stehen noch aus.
+## Herkunft
 
-Issues mit Browser-Version, Schritten sowie erwartetem/tatsächlichem Verhalten sind willkommen. Keine privaten Daten oder echten Backups veröffentlichen.
+Eigenständiger Kelvani-Code für schlagskill mit OpenAI-Coding-Unterstützung. Original-Logo vom Projektinhaber; die PNG-Datei bleibt unverändert, im dunklen Modus wird sie durch CSS angepasst. Kein kopiertes Repository und keine fremden Spendenlinks.
 
-Erweiterungsliste, Browserleiste und Tab-Symbol verwenden das vom Inhaber gelieferte blaue K-Symbol. Bei einem Update die Erweiterung neu laden. Die Symbole ändern die Gestaltung innerhalb der App nicht.
+Inter: [rsms.me/inter](https://rsms.me/inter/), SIL Open Font License 1.1, siehe assets/Inter-OFL.txt. Code: MIT, siehe LICENSE. Die Code-Lizenz ist keine Erlaubnis, als Kelvani aufzutreten. Die bereitgestellten Erweiterungsicons bleiben erhalten.
+
+Issues mit Browser-Version, Schritten und erwartetem/tatsächlichem Verhalten sind willkommen. Keine privaten Links oder echten Backups veröffentlichen.

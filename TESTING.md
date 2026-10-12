@@ -1,20 +1,32 @@
-# KelvaniSwift 0.2.0 - Validation
+# KelvaniSwift 0.3.0 — Validation
 
-## Verified automatically
+## Automated checks
 
-Node.js unit tests: 30 tests. Domain validation, unsafe URLs, JSON backups, failed writes, concurrent transactions, workspace edit conflicts, capture filters, private-window rejection, partial restore and retry/pins with mocked browser APIs.
+54 Node.js tests pass. Coverage includes legacy v1 data, optional metadata/settings, empty workspaces, strict URL/backup validation, 100/200 limits, immutable operations, concurrent storage writes, write failures, corruption protection, stale move/delete detection, atomic cross-workspace moves, destination deduplication, reordering, capture filters, private/popup-window exclusion, opening failures, retry/pins, existing-tab reuse, manager routing and worker request validation.
 
-## HTTP browser preview
+Worker tests verify that tab restoration completes independently of a popup receiver, concurrent popup/manager requests do not create duplicate tabs, failed requests do not block the queue, and full report storage does not make a successful restoration fail. Browser APIs are test doubles; they do not prove browser installation compatibility.
 
-Verified: startup without console errors, load explicit example data, rename workspace, remove/undo workspace, select/remove/undo saved tab. Narrow layouts are visually checked. Preview data are fictional. No native extension result is inferred from this.
+Package checks: local HTML/CSS/module resources exist, HTML IDs are unique, manifest popup/worker are packaged, permissions remain storage/tabs, all icon sizes exist, ZIP CRC is valid and packaged file bytes match source. JavaScript syntax checks and whitespace checks pass.
 
-## Native Chrome / Edge release gate (still pending)
+## HTTP UI checks performed on 2026-10-13
 
-1. Load unpacked in each browser and check toolbar action opens the local manager.
-2. Check CSP/resource loading and no third-party startup requests.
-3. Capture two normal windows with pinned, duplicate and internal tabs. Reject private windows. Check snapshot source and count.
-4. Restore into a new window, preserving existing windows and pins. Simulate partial errors; retry only failures. Focus an existing live tab.
-5. Import invalid, oversized and old-version backups. Cancel preview; ensure no changes. Test quota errors without false success.
-6. Full keyboard navigation, dialog return focus, screenreader labels, 200% text and 320 CSS px.
+- Loaded full manager and compact popup; checked light and dark layouts and German/English labels.
+- Created an empty workspace in the popup with color/icon/favorite; added links in popup and manager. Both views showed shared preview storage.
+- Duplicated the test workspace independently.
+- Initial native HTML drag failed in the preview. Replaced it with Pointer Events; dragging reordered tabs in both full and compact views and moved a tab onto another workspace. Verified destination deduplication and undo.
+- Verified selection/dropdown move and arrow-button reorder with undo.
+- Verified search by title, no-results state, Esc reset, dialogs, deleting only test workspaces, and retention of the original four-tab preview workspace.
+- Verified the popup expansion control routes to the full preview with its selected workspace. In an installed extension this uses chrome.tabs and a separate tab; preview routing stays in the same tab.
+- Checked console for startup errors. Preview uses fictional data and disabled browser controls. Settings were restored to German/System after checks.
 
-Not yet validated: native Chrome/Edge installation, real tabs API behavior, a full screenreader audit, store review or WCAG conformance. No cloud sync or full Workona feature parity is claimed.
+## Remaining native Chrome / Edge release gate
+
+1. Reload the unpacked extension in each browser. Toolbar must show the original icon and open a 460 × 580 CSS-pixel popup over the page. Expanding must open/focus index.html in a separate tab and preserve the selected workspace.
+2. Check packaged fonts, icons, CSP and absence of remote startup requests.
+3. Capture several normal windows, pinned/duplicate/internal tabs and selected live tabs. Ensure private windows are excluded. Test add versus explicit replace, including a target changed by another manager.
+4. Restore mixed existing/missing tabs. Verify existing matches are reused, new pins retained, no old tabs closed, and a foreground window change cannot interrupt the background operation. Test partial failure and reopening the popup to retry.
+5. Close the popup during a multi-tab restore, issue a simultaneous restore from the manager, and verify the worker queue and locally cached result.
+6. Test import/export downloads, invalid/oversized/old backups, quota errors and extension reload with existing saved data.
+7. Verify pointer/touch drag, long lists and scrolling, keyboard navigation, dialog return focus, screenreader labels and 200% text scaling. A full screenreader/accessibility audit remains pending.
+
+Native installation, real browser tabs API behavior, store review and WCAG conformance are not claimed as passed.

@@ -1,16 +1,85 @@
-import test from 'node:test'; import assert from 'node:assert/strict';
-import { EMPTY, snapshot, saveWorkspace, validateState, mergeBackup, filterWorkspaces } from '../core.js';
-const date = '2026-10-12T10:00:00Z'; const tabs = [{url:'https://example.com',title:'Beispiel',pinned:true}];
-const state = saveWorkspace(EMPTY, 'Coding', tabs, 'a', date);
-test('filters internal, unsafe, private and duplicate tabs', () => { assert.equal(snapshot([...tabs, ...tabs, {url:'chrome://settings'}, {url:'javascript:alert(1)'}, {url:'https://private.example',incognito:true}]).length,1); });
-test('snapshot preserves title and pinned state', () => assert.deepEqual(state.workspaces[0].tabs[0], {url:'https://example.com/',title:'Beispiel',pinned:true}));
-test('saving does not mutate previous state', () => assert.equal(EMPTY.workspaces.length,0));
-test('empty snapshots rejected', () => assert.throws(() => saveWorkspace(EMPTY,'A',[{url:'edge://extensions'}],'a',date)));
-test('updating existing workspace retains one entry', () => { const changed = saveWorkspace(state,'Neu',tabs,'a',date); assert.equal(changed.workspaces.length,1); assert.equal(changed.workspaces[0].name,'Neu'); });
-test('backup round-trips and rejects duplicate IDs', () => { assert.deepEqual(validateState(JSON.parse(JSON.stringify(state))),state); assert.throws(() => validateState({version:1,workspaces:[...state.workspaces,...state.workspaces]})); });
-test('backup cannot restore executable URLs', () => { const bad = structuredClone(state); bad.workspaces[0].tabs[0].url='javascript:alert(1)'; assert.throws(() => validateState(bad)); });
-test('search matches titles, URLs and workspace names', () => { for(const query of ['CODING','Beispiel','example.com']) assert.equal(filterWorkspaces(state,query).length,1); assert.equal(filterWorkspaces(state,'unbekannt').length,0); });
-test('identical imports do not duplicate workspaces', () => assert.deepEqual(mergeBackup(state,state,()=> 'new'),state));
-test('conflicting IDs keep both versions', () => { const incoming = saveWorkspace(state,'Andere Version',tabs,'a',date); const merged = mergeBackup(state,incoming,()=> 'b'); assert.equal(merged.workspaces.length,2); assert.equal(merged.workspaces[1].id,'b'); assert.equal(state.workspaces.length,1); });
-test('tab limit is enforced without silently truncating', () => assert.throws(() => snapshot(Array.from({length:201},(_,i)=>({url:`https://example.com/${i}`})))));
-test('malformed backup and blank name rejected', () => { assert.throws(()=>validateState({version:2,workspaces:[]})); assert.throws(()=>saveWorkspace(EMPTY,' ',tabs,'a',date)); });
+import test from "node:test";
+import assert from "node:assert/strict";
+import {
+  EMPTY,
+  snapshot,
+  saveWorkspace,
+  validateState,
+  mergeBackup,
+  filterWorkspaces,
+} from "../core.js";
+const date = "2026-10-12T10:00:00Z";
+const tabs = [{ url: "https://example.com", title: "Beispiel", pinned: true }];
+const state = saveWorkspace(EMPTY, "Coding", tabs, "a", date);
+test("filters internal, unsafe, private and duplicate tabs", () => {
+  assert.equal(
+    snapshot([
+      ...tabs,
+      ...tabs,
+      { url: "chrome://settings" },
+      { url: "javascript:alert(1)" },
+      { url: "https://private.example", incognito: true },
+    ]).length,
+    1,
+  );
+});
+test("snapshot preserves title and pinned state", () =>
+  assert.deepEqual(state.workspaces[0].tabs[0], {
+    url: "https://example.com/",
+    title: "Beispiel",
+    pinned: true,
+  }));
+test("saving does not mutate previous state", () =>
+  assert.equal(EMPTY.workspaces.length, 0));
+test("empty snapshots rejected", () =>
+  assert.throws(() =>
+    saveWorkspace(EMPTY, "A", [{ url: "edge://extensions" }], "a", date),
+  ));
+test("updating existing workspace retains one entry", () => {
+  const changed = saveWorkspace(state, "Neu", tabs, "a", date);
+  assert.equal(changed.workspaces.length, 1);
+  assert.equal(changed.workspaces[0].name, "Neu");
+});
+test("backup round-trips and rejects duplicate IDs", () => {
+  assert.deepEqual(validateState(JSON.parse(JSON.stringify(state))), state);
+  assert.throws(() =>
+    validateState({
+      version: 1,
+      workspaces: [...state.workspaces, ...state.workspaces],
+    }),
+  );
+});
+test("backup cannot restore executable URLs", () => {
+  const bad = structuredClone(state);
+  bad.workspaces[0].tabs[0].url = "javascript:alert(1)";
+  assert.throws(() => validateState(bad));
+});
+test("search matches titles, URLs and workspace names", () => {
+  for (const query of ["CODING", "Beispiel", "example.com"])
+    assert.equal(filterWorkspaces(state, query).length, 1);
+  assert.equal(filterWorkspaces(state, "unbekannt").length, 0);
+});
+test("identical imports do not duplicate workspaces", () =>
+  assert.deepEqual(
+    mergeBackup(state, state, () => "new"),
+    state,
+  ));
+test("conflicting IDs keep both versions", () => {
+  const incoming = saveWorkspace(state, "Andere Version", tabs, "a", date);
+  const merged = mergeBackup(state, incoming, () => "b");
+  assert.equal(merged.workspaces.length, 2);
+  assert.equal(merged.workspaces[1].id, "b");
+  assert.equal(state.workspaces.length, 1);
+});
+test("tab limit is enforced without silently truncating", () =>
+  assert.throws(() =>
+    snapshot(
+      Array.from({ length: 201 }, (_, i) => ({
+        url: `https://example.com/${i}`,
+      })),
+    ),
+  ));
+test("malformed backup and blank name rejected", () => {
+  assert.throws(() => validateState({ version: 2, workspaces: [] }));
+  assert.throws(() => saveWorkspace(EMPTY, " ", tabs, "a", date));
+});

@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.3.0 — 2026-10-13
+
+- Compact action popup with a button for the full manager; both views share stored workspaces.
+- Rebuilt purple UI, original branding, light/dark/system appearance and German/English interface.
+- Workspace creation, metadata, favorites, duplication and pointer/keyboard ordering.
+- Saved-tab pointer drag, selection-based moves, ordering, removal/undo and manual links.
+- Empty workspaces and optional metadata/settings remain compatible with the existing v1 data key.
+- Separate live-window view, selected-tab capture, explicit append/replace and existing-tab reuse.
+- Serialized background restoration survives popup closure; retry reports remain local.
+- 54 automated tests and repeated HTTP UI checks; native Chrome/Edge installation still pending.
+
 ## 0.2.1 - 2026-10-12
 
 - Add the owner-provided blue K symbol as square PNG extension/action icons in 16, 24, 32, 48 and 128 px, plus a page favicon.
