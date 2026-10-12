@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.2.1 - 2026-10-12
+
+- Add the owner-provided blue K symbol as square PNG extension/action icons in 16, 24, 32, 48 and 128 px, plus a page favicon.
+- Preserve the original proportions and white background; no dashboard logo is reintroduced.
+
 ## 0.2.0 - 2026-10-12
 
 - Implement Kelvani brandbook v3 with original logo and local Inter fonts.

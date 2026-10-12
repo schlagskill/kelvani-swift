@@ -1,6 +1,6 @@
 # KelvaniSwift
 
-KelvaniSwift sichert Tab-Arbeitsbereiche lokal und öffnet sie in neuen Fenstern. Version 0.2.0 bietet Bereichskarten, Suche, Tab-Liste mit Detailansicht, Einzel- und Mehrfachauswahl, Umbenennen/Entfernen mit Rückgängig sowie eine getrennte Ansicht offener Fenster. Darstellung: Hell, Dunkel oder System.
+KelvaniSwift sichert Tab-Arbeitsbereiche lokal und öffnet sie in neuen Fenstern. Version 0.2.1 bietet Bereichskarten, Suche, Tab-Liste mit Detailansicht, Einzel- und Mehrfachauswahl, Umbenennen/Entfernen mit Rückgängig sowie eine getrennte Ansicht offener Fenster. Darstellung: Hell, Dunkel oder System.
 
 Kostenlos, MIT-lizenziert, ohne Konto oder Server. Oberfläche auf Deutsch. Dies ist eine installierbare **Entwicklungsversion**, noch kein Chrome-Web-Store-/Edge-Add-ons-Release.
 
@@ -41,6 +41,8 @@ Automatisierte Tests prüfen Datenlogik und Speicherung sowie Browser-API-Abläu
 
 Eigenständiger Kelvani-Code für schlagskill mit OpenAI-Coding-Unterstützung. Design nach dem Kelvani-Brandbook v3; Original-Logo vom Projektinhaber, unverändert. Keine fremde Repository-Historie und keine fremden Spendenlinks.
 
-Inter: https://rsms.me/inter/ · SIL Open Font License 1.1, siehe assets/Inter-OFL.txt. Code: MIT, siehe LICENSE. Die Logo-Datei wird für die Marke mitgeliefert; die Code-Lizenz ist keine Erlaubnis, als Kelvani aufzutreten. Toolbar-Symbol-Master und Store-Assets stehen noch aus.
+Inter: https://rsms.me/inter/ · SIL Open Font License 1.1, siehe assets/Inter-OFL.txt. Code: MIT, siehe LICENSE. Die Logo-Datei wird für die Marke mitgeliefert; die Code-Lizenz ist keine Erlaubnis, als Kelvani aufzutreten. Erweiterungsicons sind hinterlegt; Store-Assets stehen noch aus.
 
 Issues mit Browser-Version, Schritten sowie erwartetem/tatsächlichem Verhalten sind willkommen. Keine privaten Daten oder echten Backups veröffentlichen.
+
+Erweiterungsliste, Browserleiste und Tab-Symbol verwenden das vom Inhaber gelieferte blaue K-Symbol. Bei einem Update die Erweiterung neu laden. Die Symbole ändern die Gestaltung innerhalb der App nicht.
