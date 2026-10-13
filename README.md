@@ -2,7 +2,7 @@ UI release 0.6.0 · gemeinsame Produktfamilie
 
 Gemeinsame UI-Quelle und Synchronisierung: assets/ui/README.md.
 
-# KelvaniSwift
+# KelvaniSwift (kelvani.net)
 
 Kostenlose, quelloffene Tab-Arbeitsbereiche für Chrome und Edge. **Version 0.6.0:** Ein Klick auf das Erweiterungssymbol öffnet ein kompaktes Popup über der aktuellen Website. Über den Pfeil oben rechts öffnest du den großen Manager in einem eigenen Browser-Tab. Beide Ansichten verwenden dieselben lokalen Daten.
 
