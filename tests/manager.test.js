@@ -25,7 +25,7 @@ test("toolbar opens a local popup with a background worker for resilient multi-t
   assert.deepEqual(manifest.permissions, ["storage", "tabs"]);
   for (const path of ["popup.html", "index.html"]) {
     const html = await readFile(new URL(`../${path}`, import.meta.url), "utf8");
-    assert.match(html, /src="controller\.js(?:\?[^"\s]+)?"/);
+    assert.match(html, path === "popup.html" ? /src="quick-popup\.js"/ : /src="controller\.js(?:\?[^"\s]+)?"/);
     assert.doesNotMatch(html, /(?:src|href)="https?:\/\//);
   }
 });

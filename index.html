@@ -7,12 +7,10 @@
     <link rel="icon" href="assets/icons/icon32.png" />
     <link rel="stylesheet" href="swift.css" /><link rel="stylesheet" href="hub.css" />
     <script type="module" src="controller.js?v=0.5.0-ui1"></script>
-  <link rel="stylesheet" href="assets/ui/tokens.css?v=1.0"><link rel="stylesheet" href="assets/ui/components.css?v=1.0"><link rel="stylesheet" href="family-layout.css?v=1.0"><script type="module" src="assets/ui/review.js?v=1.1"></script></head>
+  <link rel="stylesheet" href="assets/ui/tokens.css?v=1.0"><link rel="stylesheet" href="assets/ui/components.css?v=1.0"><link rel="stylesheet" href="family-layout.css?v=0.6.0"><script type="module" src="assets/ui/review.js?v=1.1"></script></head>
   <body>
     <header class="app-header">
-      <a class="brand" href="index.html" aria-label="KelvaniSwift"
-        ><img src="assets/product-wordmark.png" alt="KelvaniSwift" width="154" height="36"
-      /></a>
+      <a class="brand" href="index.html#view=home" aria-label="KelvaniSwift"><img class="brand-symbol" src="assets/brand-mark.png" width="34" height="34" alt=""><span class="brand-name">Kelvani<span>Swift</span></span></a>
       <div class="mode-switch" role="group" aria-label="Ansicht">
         <button id="home-view" data-hub="home" aria-pressed="false"></button><button id="saved-view" data-t="workspaces" aria-pressed="true"></button
         ><button id="live-view" data-t="live" aria-pressed="false"></button>
@@ -86,7 +84,7 @@
         </div>
         <section id="home-panel" hidden>
  <div class="hub-hero"><div><h1 data-hub="heroTitle"></h1><p class="hub-description" data-hub="heroText"></p></div><div class="hub-hero-actions"><button id="home-templates" class="primary" data-hub="fromTemplate"></button><button id="home-capture" class="secondary" data-t="capture" data-live></button><button id="home-guide" class="text-button" data-hub="quickStart"></button></div></div>
- <ol id="intro-steps" class="intro-steps"><li><span>01</span><h3 data-hub="step1"></h3><p data-hub="step1Text"></p></li><li><span>02</span><h3 data-hub="step2"></h3><p data-hub="step2Text"></p></li><li><span>03</span><h3 data-hub="step3"></h3><p data-hub="step3Text"></p></li></ol>
+ <div id="overview-stats" class="overview-stats" aria-label="Arbeitsbereich-Übersicht"></div><div class="overview-controls"><button id="only-favorites" class="secondary" aria-pressed="false">Favoriten</button><label><span id="sort-label">Sortierung</span><select id="workspace-sort"><option value="updated">Zuletzt bearbeitet</option><option value="name">Name</option><option value="size">Anzahl Tabs</option></select></label></div><ol id="intro-steps" class="intro-steps"><li><span>01</span><h3 data-hub="step1"></h3><p data-hub="step1Text"></p></li><li><span>02</span><h3 data-hub="step2"></h3><p data-hub="step2Text"></p></li><li><span>03</span><h3 data-hub="step3"></h3><p data-hub="step3Text"></p></li></ol>
  <div class="hub-section-heading"><h2 data-hub="yourSpaces"></h2><span id="spaces-count"></span></div><div id="workspace-cards" class="workspace-cards"></div><div id="home-empty" class="hub-empty" hidden><h3 data-hub="noSpaces"></h3><p data-hub="noSpacesText"></p><button id="home-blank" class="secondary" data-hub="blank"></button></div>
  <div class="hub-section-heading"><h2 data-hub="startHere"></h2><button id="home-see-templates" class="text-button" data-hub="seeTemplates"></button></div><div id="suggested-templates" class="template-grid"></div>
 </section>

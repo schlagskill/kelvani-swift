@@ -2,13 +2,13 @@
   "manifest_version": 3,
   "name": "KelvaniSwift",
   "description": "Arbeitsbereiche für Browser-Tabs. Lokal sichern, wiederfinden und kontrolliert öffnen.",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "permissions": [
     "storage",
     "tabs"
   ],
   "action": {
-    "default_title": "KelvaniSwift Ã¶ffnen",
+    "default_title": "KelvaniSwift öffnen",
     "default_icon": {
       "16": "assets/icons/icon16.png",
       "24": "assets/icons/icon24.png",

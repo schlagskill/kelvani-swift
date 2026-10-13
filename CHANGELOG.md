@@ -1,3 +1,7 @@
+## 0.6.0
+
+Eigenständiges 360px-Popup: Fenster sichern, suchen, wieder öffnen und große Ansicht aufrufen. Große Übersicht mit echten Bestandszahlen, Favoritenfilter und drei Sortierungen. K-Logo in Lila.
+
 # UI release 0.5.0
 
 Gemeinsames Designsystem, klare Überschriften und überarbeitetes Popup.

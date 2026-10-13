@@ -1,10 +1,10 @@
-UI release 0.5.0 · gemeinsame Produktfamilie
+UI release 0.6.0 · gemeinsame Produktfamilie
 
 Gemeinsame UI-Quelle und Synchronisierung: assets/ui/README.md.
 
 # KelvaniSwift
 
-Kostenlose, quelloffene Tab-Arbeitsbereiche für Chrome und Edge. **Version 0.4.1:** Ein Klick auf das Erweiterungssymbol öffnet ein kompaktes Popup über der aktuellen Website. Über den Pfeil oben rechts öffnest du den großen Manager in einem eigenen Browser-Tab. Beide Ansichten verwenden dieselben lokalen Daten.
+Kostenlose, quelloffene Tab-Arbeitsbereiche für Chrome und Edge. **Version 0.6.0:** Ein Klick auf das Erweiterungssymbol öffnet ein kompaktes Popup über der aktuellen Website. Über den Pfeil oben rechts öffnest du den großen Manager in einem eigenen Browser-Tab. Beide Ansichten verwenden dieselben lokalen Daten.
 
 Installierbare Entwicklungsversion unter MIT-Lizenz, ohne Konto, Server oder Cloud-Sync. Kein Store-Release und keine vollständige Workona-Funktionsgleichheit.
 
@@ -69,3 +69,10 @@ Issues mit Browser-Version, Schritten und erwartetem/tatsächlichem Verhalten si
 ## Verbesserungen in 0.4.1
 
 Die große Ansicht wird beim Wiederöffnen nicht mehr neu geladen. Ein offener Eingabedialog bleibt erhalten; der angeforderte Arbeitsbereich wechselt erst nach dem Schließen. Neue Suche hebt eine bestehende Tab-Auswahl auf, damit unsichtbare Links nicht versehentlich entfernt oder geöffnet werden. Die Auswahl lässt sich auch mit × aufheben. Tastaturfokus bleibt bei sortierten Tab-Buttons erhalten.
+
+
+## Aktuelle Änderungen 0.6.0
+
+Eigenständiges 360px-Popup: Fenster sichern, suchen, wieder öffnen und große Ansicht aufrufen. Große Übersicht mit echten Bestandszahlen, Favoritenfilter und drei Sortierungen. K-Logo in Lila.
+
+Nach dem Ersetzen der Dateien die entpackte Erweiterung im Browser neu laden. Das ZIP allein aktualisiert keine bereits installierte Erweiterung.
