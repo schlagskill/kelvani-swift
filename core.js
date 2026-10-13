@@ -116,6 +116,10 @@ export function validateState(value) {
     };
   });
   const result = { version: 1, workspaces };
+  if (value.templates !== undefined) {
+    if (!Array.isArray(value.templates) || value.templates.length > 50) throw new Error('Höchstens 50 eigene Vorlagen werden unterstützt.');
+    result.templates = validateState({ version: 1, workspaces: value.templates }).workspaces;
+  }
   if (value.settings !== undefined) {
     const s = value.settings;
     if (
@@ -151,14 +155,19 @@ export function saveWorkspace(state, name, tabs, id, date, source) {
 }
 export function mergeBackup(state, incoming, newId) {
   const result = structuredClone(validateState(state));
-  for (const workspace of validateState(incoming).workspaces) {
-    const existing = result.workspaces.find((w) => w.id === workspace.id);
+  const clean = validateState(incoming);
+  for (const collection of ['workspaces', 'templates']) {
+   if (!clean[collection]) continue;
+   result[collection] ??= [];
+   for (const workspace of clean[collection]) {
+    const existing = result[collection].find((w) => w.id === workspace.id);
     if (existing && JSON.stringify(existing) === JSON.stringify(workspace))
       continue;
-    result.workspaces.push({
+    result[collection].push({
       ...workspace,
       id: existing ? newId() : workspace.id,
     });
+   }
   }
   return validateState(result);
 }

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>KelvaniSwift</title>
     <link rel="icon" href="assets/icons/icon32.png" />
-    <link rel="stylesheet" href="swift.css" />
+    <link rel="stylesheet" href="swift.css" /><link rel="stylesheet" href="hub.css" />
     <script type="module" src="controller.js"></script>
   </head>
   <body>
@@ -14,7 +14,7 @@
         ><img src="assets/logo.png" alt="KelvaniSwift" width="154" height="36"
       /></a>
       <div class="mode-switch" role="group" aria-label="Ansicht">
-        <button id="saved-view" data-t="workspaces" aria-pressed="true"></button
+        <button id="home-view" data-hub="home" aria-pressed="false"></button><button id="saved-view" data-t="workspaces" aria-pressed="true"></button
         ><button id="live-view" data-t="live" aria-pressed="false"></button>
       </div>
       <div class="header-actions">
@@ -43,13 +43,13 @@
             aria-label="Neuer Arbeitsbereich"
           ></button>
         </div>
-        <nav id="workspace-list" aria-label="Arbeitsbereiche"></nav>
+        <button id="overview-entry" class="hub-nav" data-hub="home"></button><button id="templates-entry" class="hub-nav" data-hub="templates"></button><nav id="workspace-list" aria-label="Arbeitsbereiche"></nav>
         <button
           id="new-workspace"
           class="sidebar-add"
           data-t="newWorkspace"
         ></button>
-        <div class="sidebar-bottom">
+        <button id="help-entry" class="sidebar-help" data-hub="quickStart"></button><div class="sidebar-bottom">
           <span class="local-dot"></span><span data-t="saved"></span
           ><span id="total-tabs"></span>
         </div>
@@ -84,7 +84,13 @@
             aria-label="Neuer Arbeitsbereich"
           ></button>
         </div>
-        <section id="saved-panel">
+        <section id="home-panel" hidden>
+ <div class="hub-hero"><div><p class="hub-eyebrow">KelvaniSwift</p><h1 data-hub="heroTitle"></h1><p class="hub-description" data-hub="heroText"></p></div><div class="hub-hero-actions"><button id="home-templates" class="primary" data-hub="fromTemplate"></button><button id="home-capture" class="secondary" data-t="capture" data-live></button><button id="home-guide" class="text-button" data-hub="quickStart"></button></div></div>
+ <ol id="intro-steps" class="intro-steps"><li><span>01</span><h3 data-hub="step1"></h3><p data-hub="step1Text"></p></li><li><span>02</span><h3 data-hub="step2"></h3><p data-hub="step2Text"></p></li><li><span>03</span><h3 data-hub="step3"></h3><p data-hub="step3Text"></p></li></ol>
+ <div class="hub-section-heading"><h2 data-hub="yourSpaces"></h2><span id="spaces-count"></span></div><div id="workspace-cards" class="workspace-cards"></div><div id="home-empty" class="hub-empty" hidden><h3 data-hub="noSpaces"></h3><p data-hub="noSpacesText"></p><button id="home-blank" class="secondary" data-hub="blank"></button></div>
+ <div class="hub-section-heading"><h2 data-hub="startHere"></h2><button id="home-see-templates" class="text-button" data-hub="seeTemplates"></button></div><div id="suggested-templates" class="template-grid"></div>
+</section>
+<section id="templates-panel" hidden><div class="hub-page-heading"><div><p class="hub-eyebrow" data-hub="templates"></p><h1 data-hub="fromTemplate"></h1><p class="hub-description" data-hub="templatesText"></p></div><button id="templates-blank" class="secondary" data-hub="blank"></button></div><div class="hub-section-heading"><h2 data-hub="starterTemplates"></h2></div><div id="starter-grid" class="template-grid"></div><div class="hub-section-heading"><h2 data-hub="customTemplates"></h2></div><p id="own-template-help" class="hub-description" data-hub="ownHelp"></p><div id="custom-grid" class="template-grid"></div><p id="template-no-results" class="hub-empty" data-hub="noTemplateResults" hidden></p></section><section id="saved-panel">
           <div class="workspace-heading">
             <div class="workspace-title">
               <span id="workspace-symbol" class="workspace-symbol"></span>
@@ -115,7 +121,7 @@
               data-live
             ></button
             ><button id="add-link" class="secondary" data-t="addLink"></button
-            ><span class="snapshot-hint" data-t="snapshot"></span>
+            ><button id="add-current" class="secondary" data-hub="addCurrent" data-live></button><button id="save-space-template" class="text-button" data-hub="saveSpaceTemplate"></button><span class="snapshot-hint" data-t="snapshot"></span>
           </div>
           <div class="selection-toolbar" id="selection-toolbar" hidden>
             <button
@@ -406,5 +412,6 @@
         ><button id="confirm-ok" class="primary" data-t="save"></button>
       </div>
     </dialog>
-  </body>
+  <dialog id="guide-dialog" aria-labelledby="guide-title"><div class="dialog-heading"><h2 id="guide-title" data-hub="quickStart"></h2><button type="button" data-close class="icon-button" aria-label="Schließen">×</button></div><div class="guide-steps"><section><span>01</span><h3 data-hub="step1"></h3><p data-hub="step1Text"></p></section><section><span>02</span><h3 data-hub="step2"></h3><p data-hub="step2Text"></p></section><section><span>03</span><h3 data-hub="step3"></h3><p data-hub="step3Text"></p></section></div><p class="guide-note" data-hub="savedHelp"></p><div class="dialog-footer"><button type="button" data-close class="primary" data-hub="close"></button></div></dialog>
+<dialog id="template-dialog" aria-labelledby="template-title"><form id="template-form"><div class="dialog-heading"><div><p class="hub-eyebrow" data-hub="templates"></p><h2 id="template-title" data-hub="preview"></h2></div><button type="button" data-close class="icon-button" aria-label="Schließen">×</button></div><label><span data-hub="name"></span><input id="template-name" maxlength="80" required autocomplete="off"></label><div class="form-row"><label><span data-hub="color"></span><select id="template-color"></select></label><label><span data-hub="icon"></span><select id="template-icon"></select></label></div><p class="small-help" data-hub="editorHelp"></p><div id="template-links" class="template-links"></div><button type="button" id="template-add-link" class="text-button" data-hub="addLink"></button><div class="template-manage"><button id="template-update" type="button" class="secondary" data-hub="updateTemplate" hidden></button><button id="template-save-new" type="button" class="secondary" data-hub="saveNewTemplate"></button><button id="template-delete" type="button" class="danger-text" data-hub="deleteTemplate" hidden></button></div><div class="dialog-footer"><button type="button" data-close class="secondary" data-hub="cancel"></button><button type="submit" class="primary" data-hub="create"></button></div></form></dialog></body>
 </html>

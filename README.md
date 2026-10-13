@@ -1,6 +1,6 @@
 # KelvaniSwift
 
-Kostenlose, quelloffene Tab-Arbeitsbereiche für Chrome und Edge. **Version 0.3.1:** Ein Klick auf das Erweiterungssymbol öffnet ein kompaktes Popup über der aktuellen Website. Über den Pfeil oben rechts öffnest du den großen Manager in einem eigenen Browser-Tab. Beide Ansichten verwenden dieselben lokalen Daten.
+Kostenlose, quelloffene Tab-Arbeitsbereiche für Chrome und Edge. **Version 0.4.0:** Ein Klick auf das Erweiterungssymbol öffnet ein kompaktes Popup über der aktuellen Website. Über den Pfeil oben rechts öffnest du den großen Manager in einem eigenen Browser-Tab. Beide Ansichten verwenden dieselben lokalen Daten.
 
 Installierbare Entwicklungsversion unter MIT-Lizenz, ohne Konto, Server oder Cloud-Sync. Kein Store-Release und keine vollständige Workona-Funktionsgleichheit.
 
@@ -15,6 +15,15 @@ Installierbare Entwicklungsversion unter MIT-Lizenz, ohne Konto, Server oder Clo
 Bei einer bestehenden Installation: zuerst unter Einstellungen ein Backup exportieren, Dateien **im bisherigen Installationsordner** ersetzen und die Erweiterung auf der Erweiterungsseite neu laden. Ein anderer Ordner kann eine neue Erweiterungs-ID und getrennte Daten erzeugen. Bestehende v1-Daten und Backups bleiben lesbar.
 
 ## Arbeitsbereiche und Tabs
+
+### Neu in 0.4.0: Einstieg und Vorlagen
+
+- Eine Übersicht zeigt deine Projekte und erklärt den Einstieg in drei Schritten. **So funktioniert Swift** bleibt jederzeit erreichbar.
+- Sechs zweisprachige Startvorlagen: Entwicklung, Recherche, Lernen & Schule, 3D-Druck, Schreiben und persönliche Planung.
+- Vor dem Anlegen lassen sich Name, Farbe, Symbol und Links bearbeiten. Links kannst du auswählen, ergänzen oder entfernen. Das Anlegen öffnet noch keine Websites.
+- Bis zu 50 eigene Vorlagen speichern und bearbeiten. Bestehende Arbeitsbereiche lassen sich über **Als Vorlage speichern** wiederverwenden. Eine Vorlage und daraus angelegte Bereiche bleiben unabhängig.
+- Backups enthalten eigene Vorlagen. Alte Backups ohne Vorlagen bleiben lesbar; bei einem Import bleiben unterschiedliche Versionen erhalten.
+- Die kleine Ansicht bleibt 460 × 580 Pixel groß. Die große Ansicht übernimmt den ausgewählten Bereich beziehungsweise die Vorlagen- oder Startansicht.
 
 - Leere Bereiche anlegen, umbenennen, duplizieren, favorisieren sowie Farbe und Symbol wählen.
 - Im großen Manager Bereiche per Ziehen sortieren; alternativ einen Bereich fokussieren und Alt + Pfeil hoch/runter verwenden. Favoriten und übrige Bereiche erscheinen getrennt.
@@ -53,6 +62,6 @@ Inter: [rsms.me/inter](https://rsms.me/inter/), SIL Open Font License 1.1, siehe
 
 Issues mit Browser-Version, Schritten und erwartetem/tatsächlichem Verhalten sind willkommen. Keine privaten Links oder echten Backups veröffentlichen.
 
-## Verbesserungen in 0.3.1
+## Verbesserungen in 0.4.0
 
 Die große Ansicht wird beim Wiederöffnen nicht mehr neu geladen. Ein offener Eingabedialog bleibt erhalten; der angeforderte Arbeitsbereich wechselt erst nach dem Schließen. Neue Suche hebt eine bestehende Tab-Auswahl auf, damit unsichtbare Links nicht versehentlich entfernt oder geöffnet werden. Die Auswahl lässt sich auch mit × aufheben. Tastaturfokus bleibt bei sortierten Tab-Buttons erhalten.

@@ -3,6 +3,16 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import { openManager } from "../manager.js";
 const base = "chrome-extension://test/index.html";
+test("expanding the overview, templates or live tabs preserves the chosen view", async () => {
+  const calls = [];
+  const browser = { runtime: { getURL: () => base }, tabs: { create: async args => { calls.push(args); return { id: 9 }; } } };
+  for (const view of ['home','templates','live']) {
+    assert.equal(await openManager(browser, 'old-project', view), 9);
+    assert.deepEqual(calls.at(-1), {url: `${base}#view=${view}`, active: true});
+  }
+  await assert.rejects(openManager(browser, '', 'unsupported'), /Invalid view/);
+  assert.equal(calls.length, 3);
+});
 test("toolbar opens a local popup with a background worker for resilient multi-tab restoration", async () => {
   const manifest = JSON.parse(
     await readFile(new URL("../manifest.json", import.meta.url), "utf8"),

@@ -1,8 +1,8 @@
-# KelvaniSwift 0.3.1 — Validation
+# KelvaniSwift 0.4.0 — Validation
 
 ## Automated checks
 
-60 Node.js tests pass. Coverage includes legacy v1 data, optional metadata/settings, empty workspaces, strict URL/backup validation, 100/200 limits, immutable operations, concurrent storage writes, write failures, corruption protection, stale move/delete detection, atomic cross-workspace moves, destination deduplication, reordering, capture filters, private/popup-window exclusion, opening failures, retry/pins, existing-tab reuse, manager routing and worker request validation.
+69 Node.js tests pass. Coverage includes legacy v1 data, optional metadata/settings, empty workspaces, strict URL/backup validation, 100/200 limits, immutable operations, concurrent storage writes, write failures, corruption protection, stale move/delete detection, atomic cross-workspace moves, destination deduplication, reordering, capture filters, private/popup-window exclusion, opening failures, retry/pins, existing-tab reuse, manager routing and worker request validation.
 
 Worker tests verify that tab restoration completes independently of a popup receiver, concurrent popup/manager requests do not create duplicate tabs, failed requests do not block the queue, and full report storage does not make a successful restoration fail. Browser APIs are test doubles; they do not prove browser installation compatibility.
 
@@ -34,3 +34,10 @@ Native installation, real browser tabs API behavior, store review and WCAG confo
 ## Follow-up audit — 2026-10-13
 
 Verified clearing selection directly and on search changes, a hash route retaining an unsaved link dialog, deferred switching, and dialog focus return. New API tests cover target-window preference and failures after successful tab creation. Native tab navigation remains mocked.
+
+## 0.4.0 template and onboarding checks
+
+- Six bilingual starters, independent selected-link creation, editable custom templates, stale-edit/delete protection, safe URLs and 50-template limits have automated coverage.
+- Old backups remain valid; template conflicts retain both versions on merge.
+- HTTP preview: customised 3D-printing starter, saved an own template, created an independent two-link workspace, added a fourth research link and checked German/English and light/dark rendering.
+- Compact 460 × 580 popup checked visually; expansion retained the template gallery. Browser APIs remain mocked; native Edge/Chrome installation is still pending.

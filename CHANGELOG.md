@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.4.0 — 2026-10-13
+
+- Add a project overview, three-step first-run introduction and always-available guide.
+- Add six bilingual editable starter templates and up to 50 locally saved user templates.
+- Preview and edit selected links before creating independent workspaces; save existing workspaces as templates.
+- Include user templates in compatible backups with conflict-safe merging and stale-edit protection.
+- Refine compact/full layouts, project cards and saved-tab surfaces; preserve the selected view when expanding.
+- 69 automated tests plus HTTP interface checks.
+
+
 ## 0.3.1 — 2026-10-13
 
 - Focus an existing manager without reloading it; switch workspaces using a same-document route. Defer switches while an input dialog is open.

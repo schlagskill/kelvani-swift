@@ -24,12 +24,15 @@ import { listWindows, captureWindow, focusTab } from "./browser.js";
 import { openManager } from "./manager.js";
 import { requestedWorkspace } from "./routes.js";
 import { translate } from "./i18n.js";
+import { mountHub } from './hub.js';
+import { hubTranslate } from './hub-i18n.js';
+import { instantiateTemplate, saveTemplate, removeTemplate } from './templates.js';
 
 const $ = (id) => document.getElementById(id);
 const compact = document.body.dataset.compact === "true";
 let state = structuredClone(EMPTY),
   activeId = requestedWorkspace(location.href),
-  mode = "saved";
+  mode = ['home', 'templates', 'live'].includes(new URLSearchParams(location.hash.slice(1)).get('view')) ? new URLSearchParams(location.hash.slice(1)).get('view') : activeId ? 'saved' : 'home';
 let selectedUrl = null,
   checked = new Set(),
   liveChecked = new Set(),
@@ -280,7 +283,7 @@ function render() {
   const focusId = document.activeElement?.id;
   const previousActiveId = activeId;
   localize();
-  const matching = filterWorkspaces(state, $("search").value);
+  const matching = ['home','saved'].includes(mode) ? filterWorkspaces(state, $("search").value) : state.workspaces;
   if (
     !workspace() ||
     (mode === "saved" &&
@@ -301,6 +304,9 @@ function render() {
   $("live-view").setAttribute("aria-pressed", String(mode === "live"));
   $("saved-panel").hidden = mode !== "saved";
   $("live-panel").hidden = mode !== "live";
+  document.querySelector('.popup-workspaces').hidden = mode !== 'saved';
+  $('capture').hidden = ['home','templates'].includes(mode);
+  hub.render(matching);
   $("workspace-list").replaceChildren();
   for (const favorite of [true, false]) {
     const group = matching.filter(
@@ -920,7 +926,7 @@ function ask(title, text, label, action) {
     });
   showDialog("confirm-dialog");
 }
-async function prepareCapture(windowId = null, selected = false) {
+async function prepareCapture(windowId = null, selected = false, method = 'new') {
   if (!extensionMode) return;
   return run("capture", $("capture"), async () => {
     await refreshWindows(false);
@@ -957,7 +963,7 @@ async function prepareCapture(windowId = null, selected = false) {
       ...state.workspaces.map((w) => option(w.id, w.name)),
     );
     $("capture-target").value = activeId ?? "";
-    $("capture-mode").value = "new";
+    $("capture-mode").value = state.workspaces.length ? method : 'new';
     $("capture-mode").options[1].disabled = !state.workspaces.length;
     $("capture-mode").options[2].disabled = !state.workspaces.length;
     updateCaptureForm();
@@ -999,7 +1005,7 @@ $("search").addEventListener("input", () => {
 });
 $("workspace-switch").onchange = () => setActive($("workspace-switch").value);
 for (const id of ["new-sidebar", "new-popup", "new-workspace", "empty-create"])
-  $(id).onclick = () => editDialog();
+  $(id).onclick = () => hub.openLibrary();
 $("edit-workspace").onclick = () => editDialog(activeId);
 $("saved-view").onclick = () => {
   mode = "saved";
@@ -1014,11 +1020,11 @@ $("live-view").onclick = () =>
 $("expand").onclick = () =>
   run("manager", $("expand"), async () => {
     if (extensionMode) {
-      await openManager(chrome, activeId ?? "");
+      await openManager(chrome, activeId ?? "", mode);
       window.close();
     } else
       location.assign(
-        `index.html${activeId ? `?workspace=${encodeURIComponent(activeId)}` : ""}`,
+        mode === 'saved' && activeId ? `index.html?workspace=${encodeURIComponent(activeId)}` : `index.html#view=${mode}`,
       );
   });
 if (compact)
@@ -1147,6 +1153,8 @@ $("remove-selected").onclick = () => {
   });
 };
 $("capture").onclick = () => prepareCapture();
+$('add-current').onclick = () => prepareCapture(null,false,'append');
+$('save-space-template').onclick = () => { if(workspace())hub.openWorkspace(workspace()); };
 $("capture-selected").onclick = () => prepareCapture(null, true);
 $("capture-window").onchange = async () => {
   const submit = $("capture-form").querySelector("[type=submit]");
@@ -1247,11 +1255,11 @@ $("import").onchange = () =>
     if (!file) return;
     if (file.size > 2 * 1024 * 1024) throw new Error("Maximum: 2 MB");
     const incoming = validateState(JSON.parse(await file.text()));
-    const count = incoming.workspaces.length;
+  const count = incoming.workspaces.length, templateCount = (incoming.templates??[]).length;
     $("settings-dialog").close();
     ask(
       t("confirmImport"),
-      `${count} ${t("workspaces")}. ${t("importHelp")}`,
+    `${count} ${t("workspaces")} · ${templateCount} ${hubTranslate(preferences().language,'customTemplates')}. ${t("importHelp")}`,
       t("import"),
       () => commit((s) => mergeBackup(s, incoming, uid), t("done"), true),
     );
@@ -1348,6 +1356,20 @@ if (extensionMode) {
 window.addEventListener("focus", () => {
   refreshState();
   if (extensionMode) refreshWindows().catch(report);
+});
+const hub = mountHub({
+ state:()=>state, language:()=>preferences().language, view:()=>mode, compact,
+ workspace, unavailable:()=>unavailable, t, el, button, symbol, showDialog, error:report,
+ select:setActive, createEmpty:()=>editDialog(), capture:()=>prepareCapture(),
+ setView:next=>{ mode=next;checked.clear();liveChecked.clear();render(); },
+ create:(draft,trigger)=>run('data',trigger,async()=>{
+  const id=uid();await commit(s=>instantiateTemplate(s,draft,id),t('done'),true);
+  $('search').value='';setActive(id);return true;
+ }),
+ save:(draft,original,trigger)=>run('data',trigger,async()=>{
+  const id=original?.id??uid();await commit(s=>saveTemplate(s,draft,id,original),hubTranslate(preferences().language,'templateSaved'),true);return true;
+ }),
+ remove:original=>ask(hubTranslate(preferences().language,'deleteTemplate'),hubTranslate(preferences().language,'deleteTemplateHelp'),hubTranslate(preferences().language,'deleteTemplate'),()=>commit(s=>removeTemplate(s,original.id,original),hubTranslate(preferences().language,'templateDeleted'),true)),
 });
 try {
   state = await load();
