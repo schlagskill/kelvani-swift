@@ -6,12 +6,12 @@
     <title>KelvaniSwift</title>
     <link rel="icon" href="assets/icons/icon32.png" />
     <link rel="stylesheet" href="swift.css" /><link rel="stylesheet" href="hub.css" />
-    <script type="module" src="controller.js"></script>
-  </head>
+    <script type="module" src="controller.js?v=0.5.0-ui1"></script>
+  <link rel="stylesheet" href="assets/ui/tokens.css?v=1.0"><link rel="stylesheet" href="assets/ui/components.css?v=1.0"><link rel="stylesheet" href="family-layout.css?v=1.0"><script type="module" src="assets/ui/review.js?v=1.1"></script></head>
   <body>
     <header class="app-header">
       <a class="brand" href="index.html" aria-label="KelvaniSwift"
-        ><img src="assets/logo.png" alt="KelvaniSwift" width="154" height="36"
+        ><img src="assets/product-wordmark.png" alt="KelvaniSwift" width="154" height="36"
       /></a>
       <div class="mode-switch" role="group" aria-label="Ansicht">
         <button id="home-view" data-hub="home" aria-pressed="false"></button><button id="saved-view" data-t="workspaces" aria-pressed="true"></button
@@ -46,7 +46,7 @@
         <button id="overview-entry" class="hub-nav" data-hub="home"></button><button id="templates-entry" class="hub-nav" data-hub="templates"></button><nav id="workspace-list" aria-label="Arbeitsbereiche"></nav>
         <button
           id="new-workspace"
-          class="sidebar-add"
+          class="sidebar-add secondary"
           data-t="newWorkspace"
         ></button>
         <button id="help-entry" class="sidebar-help" data-hub="quickStart"></button><div class="sidebar-bottom">

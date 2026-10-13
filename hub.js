@@ -1,5 +1,6 @@
+import { icon } from "./assets/ui/icons.js?v=1.0";
 import { templateLibrary } from './templates.js';
-import { hubTranslate } from './hub-i18n.js';
+import { hubTranslate } from './hub-i18n.js?v=0.5.0';
 import { COLORS, ICONS } from './workspaces.js';
 import { safeUrl } from './core.js';
 
@@ -35,7 +36,7 @@ export function mountHub(api) {
   check.onchange=()=>{url.disabled=!check.checked;title.disabled=!check.checked;row.classList.toggle('excluded',!check.checked);};
   fields.append(title,url);
   row.append(check,fields,button(ht('removeLink'),()=>row.remove(),'icon-button'));
-  row.lastChild.textContent='×';$('template-links').append(row);
+  row.lastChild.replaceChildren(icon('close'));$('template-links').append(row);
  }
  function readDraft() {
   if(!$('template-form').reportValidity())return null;

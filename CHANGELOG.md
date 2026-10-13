@@ -1,3 +1,9 @@
+# UI release 0.5.0
+
+Gemeinsames Designsystem, klare Überschriften und überarbeitetes Popup.
+
+Gemeinsame Quelle: work/kelvani-ui. Siehe assets/ui/README.md.
+
 # Changelog
 
 ## 0.4.1 — 2026-10-13

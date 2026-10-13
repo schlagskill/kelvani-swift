@@ -1184,3 +1184,5 @@ body[data-compact] .selection-toolbar select {
     scroll-behavior: auto !important;
   }
 }
+
+.brand img,body[data-compact] .brand img,html[data-theme="dark"] .brand img{width:180px;height:auto;filter:none!important;mix-blend-mode:normal!important;background:#fff;border-radius:4px;padding:3px}

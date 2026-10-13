@@ -1,7 +1,7 @@
 const words = {
  home:['Übersicht','Overview'], areas:['Bereiche','Spaces'], shortHome:['Start','Home'], shortLive:['Offen','Open'],
- heroTitle:['Dein Browser. Nach Projekten sortiert.','Your browser. Organised by project.'],
- heroText:['Sammle zusammengehörige Tabs in Arbeitsbereichen. Öffne später genau die Seiten, die du für dein Projekt brauchst.','Keep related tabs in workspaces. Open exactly the pages you need when you return to a project.'],
+ heroTitle:['Arbeitsbereiche','Workspaces'],
+ heroText:['Tabs speichern und später gemeinsam öffnen.','Save tabs and reopen them together.'],
  fromTemplate:['Aus Vorlage starten','Start from a template'], blank:['Leerer Arbeitsbereich','Empty workspace'],
  templates:['Vorlagen','Templates'], templatesText:['Wähle einen Startpunkt. Name und Links kannst du vor dem Anlegen ändern. Es werden dabei noch keine Websites geöffnet.','Choose a starting point. Change the name and links before creating it. No websites are opened yet.'],
  customTemplates:['Eigene Vorlagen','Your templates'], starterTemplates:['Startvorlagen','Starter templates'],
@@ -10,7 +10,7 @@ const words = {
  step2:['2. Passende Tabs sammeln','2. Collect related tabs'],step2Text:['Nutze eine Vorlage, füge Links hinzu oder sichere dein Browserfenster.','Use a template, add links or save your browser window.'],
  step3:['3. Später weiterarbeiten','3. Continue later'],step3Text:['Öffne den Bereich. Bereits offene Links werden wiederverwendet.','Open the workspace. Already open links are reused.'],
  savedHelp:['Gespeicherte Bereiche sind deine Linksammlungen. Unter „Offene Tabs“ siehst du den aktuellen Browser. Sicherungen werden nur durch deine Aktion geändert.','Saved workspaces are your link collections. “Open tabs” shows your current browser. Snapshots change only when you choose to save them.'],
- yourSpaces:['Deine Arbeitsbereiche','Your workspaces'], seeTemplates:['Alle Vorlagen ansehen','See all templates'],
+ yourSpaces:['Gespeichert','Saved'], seeTemplates:['Alle Vorlagen ansehen','See all templates'],
  startHere:['Ein guter Startpunkt','A useful starting point'],
  noSpaces:['Dein erstes Projekt beginnt hier.','Your first project starts here.'],
  noSpacesText:['Eine Vorlage bringt passende Links mit. Oder starte leer und ergänze deine eigenen.','A template comes with useful starting links. Or start empty and add your own.'],
