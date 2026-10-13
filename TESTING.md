@@ -1,4 +1,4 @@
-# KelvaniSwift 0.4.0 — Validation
+# KelvaniSwift 0.4.1 — Validation
 
 ## Automated checks
 
@@ -35,7 +35,7 @@ Native installation, real browser tabs API behavior, store review and WCAG confo
 
 Verified clearing selection directly and on search changes, a hash route retaining an unsaved link dialog, deferred switching, and dialog focus return. New API tests cover target-window preference and failures after successful tab creation. Native tab navigation remains mocked.
 
-## 0.4.0 template and onboarding checks
+## 0.4.1 template and onboarding checks
 
 - Six bilingual starters, independent selected-link creation, editable custom templates, stale-edit/delete protection, safe URLs and 50-template limits have automated coverage.
 - Old backups remain valid; template conflicts retain both versions on merge.

@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.4.1 — 2026-10-13
+
+- Remove redundant brand/category captions above the home, gallery and template editor headings.
+
+
 ## 0.4.0 — 2026-10-13
 
 - Add a project overview, three-step first-run introduction and always-available guide.
