@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.3.1 — 2026-10-13
+
+- Focus an existing manager without reloading it; switch workspaces using a same-document route. Defer switches while an input dialog is open.
+- Reset hidden selections when search or workspace context changes; add a clear-selection control.
+- Preserve keyboard focus on reordered tab controls and restore focus after dialogs.
+- Prefer matching tabs in the target window. Preserve successful restoration results if querying/focusing later fails, and focus a later successful tab after an earlier failure.
+- Error notices use alert semantics; opening controls stay disabled when saved data are unavailable.
+- 60 automated tests and HTTP UI checks; native Chrome/Edge installation remains pending.
+
 ## 0.3.0 — 2026-10-13
 
 - Compact action popup with a button for the full manager; both views share stored workspaces.

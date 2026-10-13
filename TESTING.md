@@ -1,8 +1,8 @@
-# KelvaniSwift 0.3.0 — Validation
+# KelvaniSwift 0.3.1 — Validation
 
 ## Automated checks
 
-54 Node.js tests pass. Coverage includes legacy v1 data, optional metadata/settings, empty workspaces, strict URL/backup validation, 100/200 limits, immutable operations, concurrent storage writes, write failures, corruption protection, stale move/delete detection, atomic cross-workspace moves, destination deduplication, reordering, capture filters, private/popup-window exclusion, opening failures, retry/pins, existing-tab reuse, manager routing and worker request validation.
+60 Node.js tests pass. Coverage includes legacy v1 data, optional metadata/settings, empty workspaces, strict URL/backup validation, 100/200 limits, immutable operations, concurrent storage writes, write failures, corruption protection, stale move/delete detection, atomic cross-workspace moves, destination deduplication, reordering, capture filters, private/popup-window exclusion, opening failures, retry/pins, existing-tab reuse, manager routing and worker request validation.
 
 Worker tests verify that tab restoration completes independently of a popup receiver, concurrent popup/manager requests do not create duplicate tabs, failed requests do not block the queue, and full report storage does not make a successful restoration fail. Browser APIs are test doubles; they do not prove browser installation compatibility.
 
@@ -30,3 +30,7 @@ Package checks: local HTML/CSS/module resources exist, HTML IDs are unique, mani
 7. Verify pointer/touch drag, long lists and scrolling, keyboard navigation, dialog return focus, screenreader labels and 200% text scaling. A full screenreader/accessibility audit remains pending.
 
 Native installation, real browser tabs API behavior, store review and WCAG conformance are not claimed as passed.
+
+## Follow-up audit — 2026-10-13
+
+Verified clearing selection directly and on search changes, a hash route retaining an unsaved link dialog, deferred switching, and dialog focus return. New API tests cover target-window preference and failures after successful tab creation. Native tab navigation remains mocked.

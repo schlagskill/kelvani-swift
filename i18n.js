@@ -1,4 +1,9 @@
 const pairs = {
+  clearSelection: ["Auswahl aufheben", "Clear selection"],
+  routeDeferred: [
+    "Der Arbeitsbereich wechselt, sobald du den Dialog schließt. Deine Eingaben bleiben erhalten.",
+    "The workspace will switch when you close the dialog. Your draft is kept.",
+  ],
   workspaces: ["Arbeitsbereiche", "Workspaces"],
   live: ["Offene Tabs", "Open tabs"],
   saved: ["Gespeichert", "Saved"],

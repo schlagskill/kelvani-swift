@@ -48,7 +48,9 @@ export async function openOrFocusTabs(browser, tabs, targetWindowId = null) {
   const missing = [],
     reused = [];
   for (const tab of clean) {
-    const match = existing.find((t) => safeUrl(t.url) === tab.url);
+    const matches = existing.filter((t) => safeUrl(t.url) === tab.url);
+    const match =
+      matches.find((t) => t.windowId === targetWindowId) ?? matches[0];
     if (match) reused.push(match);
     else missing.push(tab);
   }
@@ -58,15 +60,20 @@ export async function openOrFocusTabs(browser, tabs, targetWindowId = null) {
     const target = windows.find((w) => w.id === targetWindowId)?.id ?? null;
     result = await openSavedTabs(browser, missing, () => {}, target);
     if (result.opened) {
-      const first = (
-        await browser.tabs.query({ windowId: result.windowId })
-      ).find((t) => t.url === missing[0].url);
-      if (first) {
-        try {
-          await focusTab(browser, { ...first, windowId: result.windowId });
-        } catch {
-          result.focusFailed = true;
-        }
+      try {
+        const failedUrls = new Set(result.failed.map((item) => item.tab.url));
+        const openedUrls = new Set(
+          missing
+            .filter((tab) => !failedUrls.has(tab.url))
+            .map((tab) => tab.url),
+        );
+        const first = (
+          await browser.tabs.query({ windowId: result.windowId })
+        ).find((t) => openedUrls.has(t.url));
+        if (!first) result.focusFailed = true;
+        else await focusTab(browser, { ...first, windowId: result.windowId });
+      } catch {
+        result.focusFailed = true;
       }
     }
   } else if (reused.length) {

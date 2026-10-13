@@ -22,12 +22,13 @@ import {
 import { extensionMode, load, update } from "./storage.js";
 import { listWindows, captureWindow, focusTab } from "./browser.js";
 import { openManager } from "./manager.js";
+import { requestedWorkspace } from "./routes.js";
 import { translate } from "./i18n.js";
 
 const $ = (id) => document.getElementById(id);
 const compact = document.body.dataset.compact === "true";
 let state = structuredClone(EMPTY),
-  activeId = new URLSearchParams(location.search).get("workspace"),
+  activeId = requestedWorkspace(location.href),
   mode = "saved";
 let selectedUrl = null,
   checked = new Set(),
@@ -41,12 +42,30 @@ let unavailable = false,
   drag = null,
   noticeTimer;
 const pending = new Set();
+let deferredWorkspaceId = null;
+window.addEventListener("hashchange", () => {
+  const target = requestedWorkspace(location.href);
+  if (!target || !state.workspaces.some((w) => w.id === target)) return;
+  if (document.querySelector("dialog[open]")) {
+    deferredWorkspaceId = target;
+    notice(t("routeDeferred"), { duration: 6000 });
+    return;
+  }
+  $("search").value = "";
+  setActive(target);
+});
 const OPEN_RESULT_KEY = "kelvani-swift.last-open";
 const preferences = () => state.settings ?? { language: "de", theme: "system" };
 const t = (key) => translate(preferences().language, key);
 const tabCount = (count) => `${count} ${t(count === 1 ? "tab" : "tabs")}`;
 const workspace = () => state.workspaces.find((w) => w.id === activeId);
 const uid = () => crypto.randomUUID();
+const rowIds = new Map();
+function tabDomId(workspaceId, url) {
+  const key = JSON.stringify([workspaceId, url]);
+  if (!rowIds.has(key)) rowIds.set(key, `saved-tab-${rowIds.size + 1}`);
+  return rowIds.get(key);
+}
 const paths = {
   folder:
     "M3 7V5a1 1 0 0 1 1-1h5l2 2h9a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V7Z",
@@ -143,6 +162,7 @@ function notice(
   const box = $("notice");
   box.replaceChildren(el("span", "", message));
   box.classList.toggle("error", error);
+  box.setAttribute("role", error ? "alert" : "status");
   box.hidden = false;
   if (action)
     box.append(
@@ -226,11 +246,18 @@ function nativeControls() {
     n.title = extensionMode ? "" : t("preview");
   });
   $("capture-selected").disabled =
-    !extensionMode || !liveChecked.size || pending.has("capture");
+    !extensionMode ||
+    unavailable ||
+    !liveChecked.size ||
+    pending.has("capture");
   $("open-all").disabled =
-    !extensionMode || !workspace()?.tabs.length || pending.has("open");
+    !extensionMode ||
+    unavailable ||
+    !workspace()?.tabs.length ||
+    !filterWorkspaces(state, $("search").value).length ||
+    pending.has("open");
   $("open-selected").disabled =
-    !extensionMode || !checked.size || pending.has("open");
+    !extensionMode || unavailable || !checked.size || pending.has("open");
   $("preview-label").hidden = extensionMode;
   $("demo").hidden = extensionMode;
 }
@@ -251,6 +278,7 @@ function matchingTabs(w) {
 }
 function render() {
   const focusId = document.activeElement?.id;
+  const previousActiveId = activeId;
   localize();
   const matching = filterWorkspaces(state, $("search").value);
   if (
@@ -260,6 +288,10 @@ function render() {
       !matching.some((w) => w.id === activeId))
   )
     activeId = matching[0]?.id ?? state.workspaces[0]?.id ?? null;
+  if (previousActiveId !== activeId) {
+    checked.clear();
+    selectedUrl = null;
+  }
   const w = workspace();
   checked = new Set(
     [...checked].filter((url) => w?.tabs.some((tab) => tab.url === url)),
@@ -375,6 +407,7 @@ function render() {
   // Dropping below the last row appends; rows stop propagation for an exact insertion point.
   $("selection-toolbar").hidden = !checked.size || mode !== "saved";
   $("selection-count").textContent = `${checked.size} ${t("selected")}`;
+  $("selection-clear").hidden = !checked.size;
   const previousTarget = $("move-target").value;
   $("move-target").replaceChildren(
     option("", t("moveTo")),
@@ -397,9 +430,16 @@ function render() {
   renderDetails(w);
   renderLive();
   nativeControls();
-  if (focusId) $(focusId)?.focus({ preventScroll: true });
+  if (focusId) {
+    const target = $(focusId);
+    const focusTarget = target?.disabled
+      ? target.closest(".tab-row")?.querySelector(".tab-text")
+      : target;
+    focusTarget?.focus({ preventScroll: true });
+  }
 }
 function savedRow(tab, w) {
+  const domId = tabDomId(w.id, tab.url);
   const row = el(
     "div",
     `tab-row${checked.has(tab.url) ? " is-selected" : ""}${selectedUrl === tab.url ? " is-detail" : ""}`,
@@ -408,7 +448,7 @@ function savedRow(tab, w) {
   const checkbox = el("input");
   checkbox.type = "checkbox";
   checkbox.checked = checked.has(tab.url);
-  checkbox.id = `check-${w.id}-${w.tabs.indexOf(tab)}`;
+  checkbox.id = `${domId}-check`;
   checkbox.setAttribute("aria-label", `${t("selected")}: ${tab.title}`);
   checkbox.addEventListener("change", () => {
     checkbox.checked ? checked.add(tab.url) : checked.delete(tab.url);
@@ -437,6 +477,7 @@ function savedRow(tab, w) {
     el("span", "tab-domain", hostname),
   );
   title.title = `${tab.title}\n${tab.url}`;
+  title.id = `${domId}-title`;
   const status = el("span", "tab-status");
   if (isOpen(tab.url))
     status.append(
@@ -470,10 +511,12 @@ function savedRow(tab, w) {
     );
     shift.disabled =
       direction === -1 ? index === 0 : index === w.tabs.length - 1;
+    shift.id = `${domId}-${direction === -1 ? "up" : "down"}`;
     actions.append(shift);
   }
   const open = button(t("open"), () => openTabs([tab]), "icon-button", "arrow");
   open.dataset.live = "";
+  open.id = `${domId}-open`;
   actions.append(open);
   const handle = button(
     t("drag"),
@@ -829,7 +872,24 @@ function showOpenResult(result) {
   );
 }
 function showDialog(id) {
-  $(id).showModal();
+  const dialog = $(id),
+    trigger = document.activeElement;
+  dialog.addEventListener(
+    "close",
+    () => {
+      if (trigger?.isConnected) trigger.focus({ preventScroll: true });
+      if (deferredWorkspaceId && !document.querySelector("dialog[open]")) {
+        const target = deferredWorkspaceId;
+        deferredWorkspaceId = null;
+        if (state.workspaces.some((w) => w.id === target)) {
+          $("search").value = "";
+          setActive(target);
+        }
+      }
+    },
+    { once: true },
+  );
+  dialog.showModal();
 }
 function editDialog(id = null) {
   editingId = id;
@@ -931,7 +991,12 @@ $("expand").append(icon("expand"));
 $("settings").append(icon("settings"));
 for (const id of ["new-sidebar", "new-popup"]) $(id).append(icon("plus"));
 $("edit-workspace").append(icon("edit"));
-$("search").addEventListener("input", render);
+$("search").addEventListener("input", () => {
+  checked.clear();
+  liveChecked.clear();
+  selectedUrl = null;
+  render();
+});
 $("workspace-switch").onchange = () => setActive($("workspace-switch").value);
 for (const id of ["new-sidebar", "new-popup", "new-workspace", "empty-create"])
   $(id).onclick = () => editDialog();
@@ -1049,6 +1114,10 @@ $("select-all").onchange = () => {
 };
 $("move-target").onchange = () => {
   $("move-selected").disabled = !$("move-target").value;
+};
+$("selection-clear").onclick = () => {
+  checked.clear();
+  render();
 };
 $("move-selected").onclick = () => {
   const w = workspace();

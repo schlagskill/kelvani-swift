@@ -50,9 +50,24 @@ test("expanding reuses an existing full manager and focuses its window", async (
   };
   await openManager(browser, "new");
   assert.deepEqual(calls, [
-    [4, { url: `${base}?workspace=new`, active: true }],
+    [4, { url: `${base}?workspace=old#workspace=new`, active: true }],
     [9, { focused: true }],
   ]);
+});
+test("same workspace only focuses the manager; it never reloads an existing draft", async () => {
+  const calls = [],
+    browser = {
+      runtime: { getURL: () => base },
+      tabs: {
+        query: async () => [
+          { id: 1, windowId: 2, url: `${base}?workspace=current` },
+        ],
+        update: async (...args) => calls.push(args),
+      },
+      windows: { update: async () => {} },
+    };
+  await openManager(browser, "current");
+  assert.deepEqual(calls, [[1, { active: true }]]);
 });
 test("manager creation failures reach the UI without falling back to external websites", async () => {
   const browser = {

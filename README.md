@@ -1,6 +1,6 @@
 # KelvaniSwift
 
-Kostenlose, quelloffene Tab-Arbeitsbereiche für Chrome und Edge. **Version 0.3.0:** Ein Klick auf das Erweiterungssymbol öffnet ein kompaktes Popup über der aktuellen Website. Über den Pfeil oben rechts öffnest du den großen Manager in einem eigenen Browser-Tab. Beide Ansichten verwenden dieselben lokalen Daten.
+Kostenlose, quelloffene Tab-Arbeitsbereiche für Chrome und Edge. **Version 0.3.1:** Ein Klick auf das Erweiterungssymbol öffnet ein kompaktes Popup über der aktuellen Website. Über den Pfeil oben rechts öffnest du den großen Manager in einem eigenen Browser-Tab. Beide Ansichten verwenden dieselben lokalen Daten.
 
 Installierbare Entwicklungsversion unter MIT-Lizenz, ohne Konto, Server oder Cloud-Sync. Kein Store-Release und keine vollständige Workona-Funktionsgleichheit.
 
@@ -52,3 +52,7 @@ Eigenständiger Kelvani-Code für schlagskill mit OpenAI-Coding-Unterstützung. 
 Inter: [rsms.me/inter](https://rsms.me/inter/), SIL Open Font License 1.1, siehe assets/Inter-OFL.txt. Code: MIT, siehe LICENSE. Die Code-Lizenz ist keine Erlaubnis, als Kelvani aufzutreten. Die bereitgestellten Erweiterungsicons bleiben erhalten.
 
 Issues mit Browser-Version, Schritten und erwartetem/tatsächlichem Verhalten sind willkommen. Keine privaten Links oder echten Backups veröffentlichen.
+
+## Verbesserungen in 0.3.1
+
+Die große Ansicht wird beim Wiederöffnen nicht mehr neu geladen. Ein offener Eingabedialog bleibt erhalten; der angeforderte Arbeitsbereich wechselt erst nach dem Schließen. Neue Suche hebt eine bestehende Tab-Auswahl auf, damit unsichtbare Links nicht versehentlich entfernt oder geöffnet werden. Die Auswahl lässt sich auch mit × aufheben. Tastaturfokus bleibt bei sortierten Tab-Buttons erhalten.

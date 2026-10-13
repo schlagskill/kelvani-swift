@@ -91,3 +91,34 @@ test("focus failure does not retry already open URLs as new tabs", async () => {
     false,
   );
 });
+test("a failed first URL does not prevent focusing a later successfully opened tab", async () => {
+  const { browser, calls } = mock();
+  browser.tabs.create = async (args) => {
+    if (args.url === tab(2).url) throw Error("denied");
+    calls.push(["create", args]);
+  };
+  browser.tabs.query = async () => [{ ...tab(3), id: 33 }];
+  const result = await openOrFocusTabs(browser, [tab(2), tab(3)], 1);
+  assert.equal(result.opened, 1);
+  assert.equal(result.failed.length, 1);
+  assert.ok(calls.some((c) => c[0] === "activate" && c[1] === 33));
+});
+test("post-opening query failure reports focus failure without losing successful results", async () => {
+  const { browser } = mock();
+  browser.tabs.query = async () => {
+    throw Error("query unavailable");
+  };
+  const result = await openOrFocusTabs(browser, [tab(2)], 1);
+  assert.equal(result.opened, 1);
+  assert.equal(result.failed.length, 0);
+  assert.equal(result.focusFailed, true);
+});
+test("duplicate live URLs prefer the requested normal window", async () => {
+  const { browser, calls } = mock();
+  browser.windows.getAll = async () => [
+    { id: 1, type: "normal", tabs: [{ ...tab(1), id: 11 }] },
+    { id: 9, type: "normal", tabs: [{ ...tab(1), id: 99 }] },
+  ];
+  await openOrFocusTabs(browser, [tab(1)], 9);
+  assert.ok(calls.some((c) => c[0] === "activate" && c[1] === 99));
+});
