@@ -6,53 +6,11 @@
     <title>KelvaniSwift</title>
     <link rel="icon" href="assets/icons/icon32.png" />
     <link rel="stylesheet" href="swift.css" /><link rel="stylesheet" href="hub.css" />
-    <script type="module" src="controller.js?v=0.6.1-final"></script>
-  <link rel="stylesheet" href="assets/ui/tokens.css?v=1.0"><link rel="stylesheet" href="assets/ui/components.css?v=1.0"><link rel="stylesheet" href="family-layout.css?v=0.6.1-final"><script type="module" src="assets/ui/review.js?v=1.1"></script></head>
+    <script type="module" src="controller.js?v=0.7.0-final"></script>
+  <link rel="stylesheet" href="assets/ui/tokens.css?v=1.0"><link rel="stylesheet" href="assets/ui/components.css?v=1.0"><link rel="stylesheet" href="workspace-ui.css?v=0.7.0-final"><script type="module" src="assets/ui/review.js?v=1.1"></script></head>
   <body>
     <header class="app-header">
       <a class="brand" href="index.html#view=home" aria-label="KelvaniSwift"><img class="brand-symbol" src="assets/brand-mark.png" width="34" height="34" alt=""><span class="brand-name">Kelvani<span>Swift</span></span></a>
-      <div class="mode-switch" role="group" aria-label="Ansicht">
-        <button id="home-view" data-hub="home" aria-pressed="false"></button><button id="saved-view" data-t="workspaces" aria-pressed="true"></button
-        ><button id="live-view" data-t="live" aria-pressed="false"></button>
-      </div>
-      <div class="header-actions">
-        <button
-          id="expand"
-          class="icon-button"
-          data-title="expand"
-          aria-label="In großem Tab öffnen"
-        ></button
-        ><button
-          id="settings"
-          class="icon-button"
-          data-title="settings"
-          aria-label="Einstellungen"
-        ></button>
-      </div>
-    </header>
-    <div class="app-shell">
-      <aside class="sidebar">
-        <div class="sidebar-heading">
-          <span data-t="workspaces"></span
-          ><button
-            id="new-sidebar"
-            class="icon-button"
-            data-title="newWorkspace"
-            aria-label="Neuer Arbeitsbereich"
-          ></button>
-        </div>
-        <button id="overview-entry" class="hub-nav" data-hub="home"></button><button id="templates-entry" class="hub-nav" data-hub="templates"></button>        <button
-          id="new-workspace"
-          class="sidebar-add secondary"
-          data-t="newWorkspace"
-        ></button>
-<nav id="workspace-list" aria-label="Arbeitsbereiche"></nav>
-        <button id="help-entry" class="sidebar-help" data-hub="quickStart"></button><div class="sidebar-bottom">
-          <span class="local-dot"></span><span data-t="saved"></span
-          ><span id="total-tabs"></span>
-        </div>
-      </aside>
-      <main>
         <div class="search-row">
           <label class="search-box"
             ><span id="search-icon" aria-hidden="true"></span
@@ -70,6 +28,48 @@
             data-live
           ></button>
         </div>
+      <div class="header-actions">
+        <button
+          id="expand"
+          class="icon-button"
+          data-title="expand"
+          aria-label="In großem Tab öffnen"
+        ></button
+        ><button
+          id="settings"
+          class="icon-button"
+          data-title="settings"
+          aria-label="Einstellungen"
+        ></button>
+      </div>
+    </header>
+    <div class="app-shell">
+      <aside class="sidebar">      <div class="mode-switch primary-navigation" role="navigation" aria-label="Ansicht">
+        <button id="home-view" data-hub="home" aria-pressed="false"></button><button id="saved-view" hidden data-t="workspaces" aria-pressed="true"></button
+        ><button id="live-view" data-t="live" aria-pressed="false"></button>
+      <button id="templates-entry" class="hub-nav" data-hub="templates"></button></div>
+
+        <div class="sidebar-heading">
+          <span data-t="workspaces"></span
+          ><button
+            id="new-sidebar"
+            class="icon-button"
+            data-title="newWorkspace"
+            aria-label="Neuer Arbeitsbereich"
+          ></button>
+        </div>
+        <button id="overview-entry" hidden data-hub="home"></button>        <button
+          id="new-workspace"
+          class="sidebar-add secondary"
+          data-t="newWorkspace"
+        ></button>
+<nav id="workspace-list" aria-label="Arbeitsbereiche"></nav>
+        <button id="help-entry" class="sidebar-help" data-hub="quickStart"></button><div class="sidebar-bottom">
+          <span class="local-dot"></span><span data-t="saved"></span
+          ><span id="total-tabs"></span>
+        </div>
+      </aside>
+      <main>
         <div class="popup-workspaces">
           <select
             id="workspace-switch"
@@ -83,9 +83,9 @@
           ></button>
         </div>
         <section id="home-panel" hidden>
- <div class="hub-hero"><div><h1 data-hub="heroTitle"></h1></div><div class="hub-hero-actions"><button id="home-new" class="primary" data-t="newWorkspace"></button><button id="home-templates" class="secondary" data-hub="fromTemplate"></button><button id="home-guide" class="text-button" data-hub="quickStart"></button></div></div>
+ <div class="hub-hero"><div><h1 data-hub="heroTitle"></h1></div><div class="hub-hero-actions"><button id="home-new" class="primary" data-t="newWorkspace"></button><button id="home-templates" hidden class="secondary" data-hub="fromTemplate"></button><button id="home-guide" class="text-button" data-hub="quickStart"></button></div></div>
  <div id="overview-stats" class="overview-stats" aria-label="Arbeitsbereich-Übersicht"></div><div class="overview-controls"><button id="only-favorites" class="secondary" aria-pressed="false">Favoriten</button><label><span id="sort-label">Sortierung</span><select id="workspace-sort"><option value="updated">Zuletzt bearbeitet</option><option value="name">Name</option><option value="size">Anzahl Tabs</option></select></label></div>
- <div class="hub-section-heading"><h2 data-hub="yourSpaces"></h2><span id="spaces-count"></span></div><div id="workspace-cards" class="workspace-cards"></div><div id="home-empty" class="hub-empty" hidden><h3 data-hub="noSpaces"></h3><p hidden data-hub="noSpacesText"></p><button id="home-blank" class="secondary" data-hub="blank"></button></div>
+ <div class="hub-section-heading"><h2 class="visually-hidden" data-hub="yourSpaces"></h2><span id="spaces-count" hidden></span></div><div class="space-list-heading" aria-hidden="true"><span data-hub="spaceColumn"></span><span data-hub="tabsColumn"></span><span data-hub="editedColumn"></span><span></span></div><div id="workspace-cards" class="workspace-cards" role="list"></div><div id="home-empty" class="hub-empty" hidden><h3 data-hub="noSpaces"></h3><p hidden data-hub="noSpacesText"></p><button id="home-blank" class="secondary" data-hub="blank"></button></div>
 
 </section>
 <section id="templates-panel" hidden><div class="hub-page-heading"><div><h1 data-hub="fromTemplate"></h1><p class="hub-description" data-hub="templatesText"></p></div><button id="templates-blank" class="secondary" data-hub="blank"></button></div><div class="hub-section-heading"><h2 data-hub="starterTemplates"></h2></div><div id="starter-grid" class="template-grid"></div><div class="hub-section-heading"><h2 data-hub="customTemplates"></h2></div><p id="own-template-help" class="hub-description" data-hub="ownHelp"></p><div id="custom-grid" class="template-grid"></div><p id="template-no-results" class="hub-empty" data-hub="noTemplateResults" hidden></p></section><section id="saved-panel">
@@ -192,7 +192,7 @@
       aria-live="polite"
       hidden
     ></div>
-    <dialog id="workspace-dialog">
+    <dialog id="workspace-dialog" aria-labelledby="workspace-dialog-title">
       <form id="workspace-form">
         <div class="dialog-heading">
           <h2 id="workspace-dialog-title"></h2>
@@ -392,7 +392,7 @@
         </div>
       </form>
     </dialog>
-    <dialog id="confirm-dialog">
+    <dialog id="confirm-dialog" aria-labelledby="confirm-title">
       <div class="dialog-heading">
         <h2 id="confirm-title"></h2>
         <button

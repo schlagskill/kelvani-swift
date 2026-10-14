@@ -1,3 +1,13 @@
+# Swift 0.7.0 — Neubau und Prüfung am 14.10.2026
+
+80 automatisierte Tests bestehen. HTML-IDs sind eindeutig und sämtliche lokalen Paketressourcen vorhanden.
+
+Browserprüfung mit isolierten Testdaten: 28 Arbeitsbereiche und 32 offene Tabs; Navigationspositionen y=96/140/184/306 bleiben nach 1440px Inhalts-Scroll unverändert. Der Ansichtswechsel startet den Inhalt oben. Geprüft wurden Englisch/Dunkel, Deutsch/Hell, 620px und 360px ohne horizontalen Überlauf, leere Startansicht, Vorlagenauswahl und Erstellen eines Arbeitsbereichs mit drei Links. Das Popup wurde bei 360px Breite vollständig angesehen.
+
+Der echte Browser-Favicon-Cache und die installierte Edge-Erweiterung wurden nicht live geprüft. Die HTTP-Vorschau zeigt ausschließlich Ersatzsymbole; die API-Testdaten sind keine tatsächlichen Browserfenster. Keine neue Aussage zur nativen Browserinstallation wird aus diesen Prüfungen abgeleitet.
+
+## Frühere Prüfungen
+
 # Swift 0.6.1 — Prüfung vom 14.10.2026
 
 80 automatisierte Tests bestehen. Neue Prüfungen decken Browser-Favicon-Adressen, ungültige URLs, Offline-Vorschau und Ladefehler ab.

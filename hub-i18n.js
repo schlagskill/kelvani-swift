@@ -1,6 +1,7 @@
 const words = {
+ spaceColumn:['Arbeitsbereich','Workspace'], tabsColumn:['Tabs','Tabs'], editedColumn:['Bearbeitet','Updated'], emptySpace:['Noch keine Tabs','No tabs yet'],
  more:['Mehr','More'],
- home:['Übersicht','Overview'], areas:['Bereiche','Spaces'], shortHome:['Start','Home'], shortLive:['Offen','Open'],
+ home:['Arbeitsbereiche','Workspaces'], areas:['Bereiche','Spaces'], shortHome:['Start','Home'], shortLive:['Offen','Open'],
  heroTitle:['Arbeitsbereiche','Workspaces'],
  heroText:['Tabs speichern und später gemeinsam öffnen.','Save tabs and reopen them together.'],
  fromTemplate:['Aus Vorlage starten','Start from a template'], blank:['Leerer Arbeitsbereich','Empty workspace'],

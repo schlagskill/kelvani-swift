@@ -1,13 +1,14 @@
+import { siteIcon } from './site-icons.js';
 import { icon } from "./assets/ui/icons.js?v=1.0";
 import { templateLibrary } from './templates.js';
-import { hubTranslate } from './hub-i18n.js?v=0.6.1';
+import { hubTranslate } from './hub-i18n.js?v=0.7.0-final';
 import { COLORS, ICONS } from './workspaces.js';
 import { safeUrl } from './core.js';
 
 export function mountHub(api) {
  const $=id=>document.getElementById(id), ht=key=>hubTranslate(api.language(),key);
  const { el, button, symbol }=api;
- let original=null, onlyFavorites=false, lastMatching=[];
+ let original=null, onlyFavorites=false, lastMatching=[], recordNumber=0;
  $('only-favorites').onclick=()=>{onlyFavorites=!onlyFavorites;render(lastMatching);};$('workspace-sort').onchange=()=>render(lastMatching);
  function view(mode) { $('search').value=''; api.setView(mode); }
  for(const id of ['home-templates','templates-entry']) $(id).onclick=()=>view('templates');
@@ -68,12 +69,22 @@ export function mountHub(api) {
   const foot=el('div','card-footer',ht('useTemplate'));foot.append(el('span','','↗'));card.append(foot);return card;
  }
  function workspaceCard(workspace) {
-  const card=button(workspace.name,()=>api.select(workspace.id),'space-card');
-  const head=el('div','card-top');head.append(symbol(workspace),el('span','card-category',`${workspace.tabs.length} ${api.t(workspace.tabs.length===1?'tab':'tabs')}`));
-  const content=el('div');content.append(el('h3','',workspace.name));
-  if(workspace.favorite)content.append(el('span','space-favorite','★'));
-  card.replaceChildren(head,content,chips(workspace.tabs));
-  const foot=el('div','card-footer',ht('openSpace'));foot.append(el('span','','→'));card.append(foot);return card;
+  const row=el('div','space-list-item');row.setAttribute('role','listitem');
+  const card=button(workspace.name,()=>api.select(workspace.id),'space-row');
+  const name=el('div','space-copy'),title=el('h3','',workspace.name);
+  if(workspace.favorite){const star=icon('star');star.classList.add('favorite-star');title.append(star);}
+  const preview=el('div','space-preview'),icons=el('span','site-stack');
+  for(const tab of workspace.tabs.slice(0,3))icons.append(siteIcon(tab.url,api.faviconRuntime));
+  preview.append(icons,el('span','space-domains',workspace.tabs.slice(0,2).map(tab=>new URL(tab.url).hostname.replace(/^www\./,'')).join(' · ')||ht('emptySpace')));
+  name.append(title,preview);
+  const count=el('span','space-tab-count',String(workspace.tabs.length));
+  count.append(el('span','visually-hidden',' '+api.t(workspace.tabs.length===1?'tab':'tabs')));
+  const date=el('span','space-updated',new Intl.DateTimeFormat(api.language(),{day:'numeric',month:'short',...(new Date(workspace.updatedAt).getFullYear()!==new Date().getFullYear()?{year:'numeric'}:{})}).format(new Date(workspace.updatedAt)));date.title=new Intl.DateTimeFormat(api.language(),{dateStyle:'medium',timeStyle:'short'}).format(new Date(workspace.updatedAt));
+  const contextId='space-context-'+(++recordNumber);preview.id=contextId;count.id=contextId+'-count';date.id=contextId+'-date';
+  date.prepend(el('span','visually-hidden',ht('editedColumn')+' '));
+  card.setAttribute('aria-describedby',`${preview.id} ${count.id} ${date.id}`);
+  card.replaceChildren(symbol(workspace),name,count,date,icon('right'));
+  row.append(card);return row;
  }
  function render(matching) {
   lastMatching=matching; const english=api.language()==='en';
@@ -86,14 +97,16 @@ export function mountHub(api) {
   matching=[...matching].filter(w=>!onlyFavorites||w.favorite).sort((a,b)=>$('workspace-sort').value==='name'?a.name.localeCompare(b.name,api.language()):$('workspace-sort').value==='size'?b.tabs.length-a.tabs.length:Date.parse(b.updatedAt)-Date.parse(a.updatedAt));
   document.querySelectorAll('[data-hub]').forEach(node=>node.textContent=ht(node.dataset.hub));
   const view=api.view();document.body.dataset.view=view;
+  for(const [id,glyph] of [['home-view','folder'],['live-view','globe'],['templates-entry','book']])$(id).prepend(icon(glyph));
   $('home-panel').hidden=view!=='home';$('templates-panel').hidden=view!=='templates';
-  $('home-view').setAttribute('aria-pressed',String(['home','templates'].includes(view)));
+  $('home-view').setAttribute('aria-pressed',String(view==='home'));
   $('overview-entry').setAttribute('aria-current',view==='home'?'page':'false');
   $('templates-entry').setAttribute('aria-current',view==='templates'?'page':'false');
   if(api.compact){$('home-view').textContent=ht('shortHome');$('saved-view').textContent=ht('areas');$('live-view').textContent=ht('shortLive');}
   if(view==='templates') {$('search').placeholder=ht('templateSearch');$('search').setAttribute('aria-label',ht('templateSearch'));}
   $('spaces-count').textContent=String(api.state().workspaces.length);
   $('workspace-cards').replaceChildren(...matching.map(workspaceCard));
+  document.querySelector('.space-list-heading').hidden=!matching.length;
   $('home-empty').hidden=matching.length>0;
   $('home-empty').querySelector('p').hidden=!(all.length&&!matching.length);
   if(api.state().workspaces.length && !matching.length){$('home-empty').querySelector('h3').textContent=onlyFavorites?(english?'No favorites yet.':'Noch keine Favoriten.'):api.t('noResults');$('home-empty').querySelector('p').textContent=onlyFavorites?(english?'Mark a workspace with the star to find it here.':'Markiere einen Arbeitsbereich mit dem Stern, um ihn hier wiederzufinden.'):api.t('noResultsHelp');}

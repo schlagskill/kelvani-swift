@@ -28,8 +28,8 @@ import { listWindows, captureWindow, focusTab } from "./browser.js";
 import { openManager } from "./manager.js";
 import { requestedWorkspace } from "./routes.js";
 import { translate } from "./i18n.js";
-import { mountHub } from './hub.js?v=0.6.1';
-import { hubTranslate } from './hub-i18n.js?v=0.6.1';
+import { mountHub } from './hub.js?v=0.7.0-final';
+import { hubTranslate } from './hub-i18n.js?v=0.7.0-final';
 import { instantiateTemplate, saveTemplate, removeTemplate } from './templates.js';
 
 const $ = (id) => document.getElementById(id);
@@ -101,6 +101,11 @@ function option(value, text) {
   node.value = value;
   return node;
 }
+function updateSearchPlaceholder() {
+  const full=mode==='templates'?hubTranslate(preferences().language,'templateSearch'):t('search');
+  $('search').placeholder=matchMedia('(max-width:460px)').matches?(preferences().language==='en'?'Search…':'Suche…'):full;
+  $('search').setAttribute('aria-label',full);
+}
 function localize() {
   document.documentElement.lang = preferences().language;
   document.documentElement.dataset.theme = preferences().theme;
@@ -120,7 +125,7 @@ function localize() {
   $("workspace-list").setAttribute("aria-label", t("workspaces"));
   document
     .querySelector(".mode-switch")
-    .setAttribute("aria-label", t("workspaces"));
+     .setAttribute("aria-label", preferences().language === "en" ? "Main navigation" : "Hauptnavigation");
   document
     .querySelectorAll("[data-close].icon-button")
     .forEach((n) => { n.setAttribute("aria-label", t("close")); n.replaceChildren(icon("close")); });
@@ -283,6 +288,7 @@ function render() {
   document.querySelector('.popup-workspaces').hidden = mode !== 'saved';
   $('capture').hidden = ['home','templates'].includes(mode);
   hub.render(matching);
+  updateSearchPlaceholder();
   $("workspace-list").replaceChildren();
   for (const favorite of [true, false]) {
     const group = matching.filter(
@@ -1294,6 +1300,7 @@ async function refreshState() {
 window.addEventListener("storage", (event) => {
   if (event.key === "kelvani-swift.v1") refreshState();
 });
+matchMedia("(max-width:460px)").addEventListener("change", updateSearchPlaceholder);
 let windowRefreshTimer;
 if (extensionMode) {
   chrome.storage.onChanged?.addListener((changes, area) => {
@@ -1323,7 +1330,7 @@ window.addEventListener("focus", () => {
 document.querySelectorAll('#workspace-more button').forEach(button=>button.addEventListener('click',()=>{$('workspace-more').open=false;}));
 const hub = mountHub({
  state:()=>state, language:()=>preferences().language, view:()=>mode, compact,
- workspace, unavailable:()=>unavailable, t, el, button, symbol, showDialog, error:report,
+ workspace, faviconRuntime, unavailable:()=>unavailable, t, el, button, symbol, showDialog, error:report,
  select:setActive, createEmpty:()=>editDialog(), capture:()=>prepareCapture(),
  setView:next=>{ mode=next;checked.clear();liveChecked.clear();render(); },
  create:(draft,trigger)=>run('data',trigger,async()=>{

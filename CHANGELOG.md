@@ -1,3 +1,11 @@
+## 0.7.0
+
+- Neuer, zusammenhängender Produktstil nach einer dokumentierten Recherche mit 52 Quellen.
+- Einmalige Navigation und zentrale Suche; feste Scrollbereiche.
+- Arbeitsbereiche als kompakte Liste mit Website-Kontext, Tab-Anzahl und Datum.
+- Abgestimmtes Popup, neutralere Hell-/Dunkel-Palette und responsive Navigation.
+- Datenmodell, Browser-Aktionen, Vorlagen und Backup-Funktionen erhalten.
+
 ## 0.6.1
 
 - Feste Navigation; Inhalt und Arbeitsbereich-Liste scrollen getrennt.

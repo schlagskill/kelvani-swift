@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "KelvaniSwift",
   "description": "Arbeitsbereiche f\u00fcr Browser-Tabs. Lokal sichern, wiederfinden und kontrolliert \u00f6ffnen.",
-  "version": "0.6.1",
+  "version": "0.7.0",
   "permissions": [
     "storage",
     "tabs",
