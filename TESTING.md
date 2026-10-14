@@ -1,3 +1,15 @@
+# Swift 0.6.1 — Prüfung vom 14.10.2026
+
+80 automatisierte Tests bestehen. Neue Prüfungen decken Browser-Favicon-Adressen, ungültige URLs, Offline-Vorschau und Ladefehler ab.
+
+Die HTTP-Oberfläche wurde mit isolierten Browser-API-Testdaten geprüft: 28 Arbeitsbereiche, 32 offene Tabs, Scrollen der Hauptliste, Wechsel zwischen Ansichten, leerer Start, Anlegen eines Arbeitsbereichs und Hilfe-Dialog. Die drei oberen Navigationskontrollen bleiben bei y=160/206/260 px an derselben Stelle, auch nach 1296 px Inhalts-Scroll. Das schmale Layout bei 620 px hat keinen horizontalen Überlauf.
+
+Die installierte Erweiterung und der echte Browser-Favicon-Cache konnten über die verfügbaren Browser-Werkzeuge nicht geprüft werden. Der native Icon-Zugriff folgt der dokumentierten Chromium-Favicon-Schnittstelle; die HTTP-Vorschau verwendet nur Ersatzsymbole.
+
+Design-Referenzen: https://workona.com/help/tab-manager/ und https://gettabme.com/guide.html. Browser-Schnittstelle: https://developer.chrome.com/docs/extensions/how-to/ui/favicons.
+
+## Frühere Prüfungen
+
 # KelvaniSwift 0.4.1 — Validation
 
 ## Automated checks

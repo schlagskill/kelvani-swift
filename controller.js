@@ -1,3 +1,4 @@
+import { siteIcon } from './site-icons.js';
 import { icon } from "./assets/ui/icons.js?v=1.0";
 import { NOTICE_DURATIONS } from "./assets/ui/feedback.js?v=1";
 import "./assets/ui/review.js";
@@ -27,15 +28,17 @@ import { listWindows, captureWindow, focusTab } from "./browser.js";
 import { openManager } from "./manager.js";
 import { requestedWorkspace } from "./routes.js";
 import { translate } from "./i18n.js";
-import { mountHub } from './hub.js?v=0.5.0-ui1';
-import { hubTranslate } from './hub-i18n.js?v=0.5.0';
+import { mountHub } from './hub.js?v=0.6.1';
+import { hubTranslate } from './hub-i18n.js?v=0.6.1';
 import { instantiateTemplate, saveTemplate, removeTemplate } from './templates.js';
 
 const $ = (id) => document.getElementById(id);
+const faviconRuntime = extensionMode ? chrome.runtime : null;
 const compact = document.body.dataset.compact === "true";
 let state = structuredClone(EMPTY),
   activeId = requestedWorkspace(location.href),
   mode = ['home', 'templates', 'live'].includes(new URLSearchParams(location.hash.slice(1)).get('view')) ? new URLSearchParams(location.hash.slice(1)).get('view') : activeId ? 'saved' : 'home';
+let lastRenderedMode = null;
 let selectedUrl = null,
   checked = new Set(),
   liveChecked = new Set(),
@@ -234,6 +237,7 @@ function nativeControls() {
 }
 function setActive(id) {
   activeId = id;
+  document.querySelector("main").scrollTop = 0;
   selectedUrl = null;
   checked.clear();
   mode = "saved";
@@ -248,6 +252,10 @@ function matchingTabs(w) {
       );
 }
 function render() {
+  if(mode!==lastRenderedMode){document.querySelector('main').scrollTop=0;$('workspace-more').open=false;lastRenderedMode=mode;}
+  const route=new URL(location.href);
+  route.hash=new URLSearchParams(mode==='saved'&&activeId?{workspace:activeId}:{view:mode}).toString();
+  if(route.href!==location.href)history.replaceState(null,'',route.href);
   const focusId = document.activeElement?.id;
   const previousActiveId = activeId;
   localize();
@@ -429,14 +437,7 @@ function savedRow(tab, w) {
     render();
   });
   const hostname = new URL(tab.url).hostname;
-  const badge = el(
-    "span",
-    "tab-icon",
-    hostname
-      .replace(/^www\./, "")
-      .slice(0, 1)
-      .toUpperCase(),
-  );
+  const badge = siteIcon(tab.url, faviconRuntime);
   const title = button(
     tab.title,
     () => {
@@ -535,17 +536,12 @@ function renderDetails(w) {
   const box = $("details");
   box.replaceChildren(el("div", "detail-eyebrow", t("detail")));
   const tab = w?.tabs.find((item) => item.url === selectedUrl);
+  box.hidden = !tab;
+  if (!tab) return;
   if (tab) {
     const hostname = new URL(tab.url).hostname;
     box.append(
-      el(
-        "div",
-        "tab-icon",
-        hostname
-          .replace(/^www\./, "")
-          .slice(0, 1)
-          .toUpperCase(),
-      ),
+      siteIcon(tab.url, faviconRuntime),
       el("h2", "", tab.title),
       el("p", "detail-url", tab.url),
       el(
@@ -588,13 +584,16 @@ function renderLive() {
   const box = $("live-list");
   box.replaceChildren();
   if (!extensionMode) {
+    $("live-summary").textContent="";
     box.append(el("div", "empty-state", t("preview")));
     return;
   }
   const q = $("search").value.trim().toLocaleLowerCase();
+  const shown=windows.flatMap(w=>w.tabs).filter(tab=>`${tab.title} ${tab.url}`.toLocaleLowerCase().includes(q));
+  $("live-summary").textContent=`${tabCount(shown.length)} · ${windows.length} ${preferences().language==="en"?(windows.length===1?"window":"windows"):"Fenster"}`;
   const ids = new Set(windows.flatMap((w) => w.tabs.map((tab) => tab.id)));
   liveChecked = new Set([...liveChecked].filter((id) => ids.has(id)));
-  for (const w of windows) {
+  for (const [windowIndex,w] of windows.entries()) {
     const tabs = w.tabs.filter((tab) =>
       `${tab.title} ${tab.url}`.toLocaleLowerCase().includes(q),
     );
@@ -602,7 +601,7 @@ function renderLive() {
     const group = el("div", "window-group"),
       header = el("div", "window-heading");
     header.append(
-      el("span", "", `${t("windowLabel")} ${w.id} · ${tabCount(tabs.length)}`),
+      el("span", "", `${t("windowLabel")} ${windowIndex+1} · ${tabCount(tabs.length)}`),
       button(t("capture"), () => prepareCapture(w.id), ""),
     );
     group.append(header);
@@ -630,11 +629,7 @@ function renderLive() {
       );
       row.append(
         input,
-        el(
-          "span",
-          "tab-icon",
-          new URL(tab.url).hostname.slice(0, 1).toUpperCase(),
-        ),
+        siteIcon(tab.url, faviconRuntime),
         tabButton,
         button(
           t("focus"),
@@ -973,7 +968,7 @@ $("search").addEventListener("input", () => {
 });
 $("workspace-switch").onchange = () => setActive($("workspace-switch").value);
 for (const id of ["new-sidebar", "new-popup", "new-workspace", "empty-create"])
-  $(id).onclick = () => hub.openLibrary();
+  $(id).onclick = () => editDialog();
 $("edit-workspace").onclick = () => editDialog(activeId);
 $("saved-view").onclick = () => {
   mode = "saved";
@@ -1325,6 +1320,7 @@ window.addEventListener("focus", () => {
   refreshState();
   if (extensionMode) refreshWindows().catch(report);
 });
+document.querySelectorAll('#workspace-more button').forEach(button=>button.addEventListener('click',()=>{$('workspace-more').open=false;}));
 const hub = mountHub({
  state:()=>state, language:()=>preferences().language, view:()=>mode, compact,
  workspace, unavailable:()=>unavailable, t, el, button, symbol, showDialog, error:report,

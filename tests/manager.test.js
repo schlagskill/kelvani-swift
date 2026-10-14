@@ -22,7 +22,7 @@ test("toolbar opens a local popup with a background worker for resilient multi-t
     service_worker: "background.js",
     type: "module",
   });
-  assert.deepEqual(manifest.permissions, ["storage", "tabs"]);
+  assert.deepEqual(manifest.permissions, ["storage", "tabs", "favicon"]);
   for (const path of ["popup.html", "index.html"]) {
     const html = await readFile(new URL(`../${path}`, import.meta.url), "utf8");
     assert.match(html, path === "popup.html" ? /src="quick-popup\.js"/ : /src="controller\.js(?:\?[^"\s]+)?"/);

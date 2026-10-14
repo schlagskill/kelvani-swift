@@ -1,6 +1,6 @@
 import { icon } from "./assets/ui/icons.js?v=1.0";
 import { templateLibrary } from './templates.js';
-import { hubTranslate } from './hub-i18n.js?v=0.5.0';
+import { hubTranslate } from './hub-i18n.js?v=0.6.1';
 import { COLORS, ICONS } from './workspaces.js';
 import { safeUrl } from './core.js';
 
@@ -10,11 +10,10 @@ export function mountHub(api) {
  let original=null, onlyFavorites=false, lastMatching=[];
  $('only-favorites').onclick=()=>{onlyFavorites=!onlyFavorites;render(lastMatching);};$('workspace-sort').onchange=()=>render(lastMatching);
  function view(mode) { $('search').value=''; api.setView(mode); }
- for(const id of ['home-templates','home-see-templates','templates-entry']) $(id).onclick=()=>view('templates');
+ for(const id of ['home-templates','templates-entry']) $(id).onclick=()=>view('templates');
  for(const id of ['home-view','overview-entry']) $(id).onclick=()=>view('home');
  for(const id of ['home-guide','help-entry']) $(id).onclick=()=>api.showDialog('guide-dialog');
- for(const id of ['home-blank','templates-blank']) $(id).onclick=()=>api.createEmpty();
- $('home-capture').onclick=()=>api.capture();
+ for(const id of ['home-new','home-blank','templates-blank']) $(id).onclick=()=>api.createEmpty();
  $('template-add-link').onclick=()=>{ appendLink({ title:'',url:'',pinned:false }); $('template-links').lastChild.querySelector('.draft-url').focus(); };
  $('template-form').onsubmit=event=>{
   event.preventDefault();
@@ -74,13 +73,15 @@ export function mountHub(api) {
   const content=el('div');content.append(el('h3','',workspace.name));
   if(workspace.favorite)content.append(el('span','space-favorite','★'));
   card.replaceChildren(head,content,chips(workspace.tabs));
-  const foot=el('div','card-footer',api.t('workspaces'));foot.append(el('span','','→'));card.append(foot);return card;
+  const foot=el('div','card-footer',ht('openSpace'));foot.append(el('span','','→'));card.append(foot);return card;
  }
  function render(matching) {
   lastMatching=matching; const english=api.language()==='en';
   $('only-favorites').textContent=english?'Favorites':'Favoriten';$('only-favorites').setAttribute('aria-pressed',String(onlyFavorites));$('sort-label').textContent=english?'Sort':'Sortierung';
   [...$('workspace-sort').options].forEach((option,i)=>option.textContent=(english?['Recently updated','Name','Tab count']:['Zuletzt bearbeitet','Name','Anzahl Tabs'])[i]);
   const all=api.state().workspaces;const stats=[[all.length,english?'Workspaces':'Arbeitsbereiche'],[all.reduce((n,w)=>n+w.tabs.length,0),english?'Saved tabs':'Gesicherte Tabs'],[all.filter(w=>w.favorite).length,english?'Favorites':'Favoriten']];
+  $('overview-stats').hidden=all.length===0;
+  document.querySelector('.overview-controls').hidden=all.length===0;
   $('overview-stats').replaceChildren(...stats.map(([count,label])=>{const card=el('div','overview-stat');card.append(el('strong','',String(count)),el('span','',label));return card;}));
   matching=[...matching].filter(w=>!onlyFavorites||w.favorite).sort((a,b)=>$('workspace-sort').value==='name'?a.name.localeCompare(b.name,api.language()):$('workspace-sort').value==='size'?b.tabs.length-a.tabs.length:Date.parse(b.updatedAt)-Date.parse(a.updatedAt));
   document.querySelectorAll('[data-hub]').forEach(node=>node.textContent=ht(node.dataset.hub));
@@ -91,10 +92,10 @@ export function mountHub(api) {
   $('templates-entry').setAttribute('aria-current',view==='templates'?'page':'false');
   if(api.compact){$('home-view').textContent=ht('shortHome');$('saved-view').textContent=ht('areas');$('live-view').textContent=ht('shortLive');}
   if(view==='templates') {$('search').placeholder=ht('templateSearch');$('search').setAttribute('aria-label',ht('templateSearch'));}
-  $('intro-steps').hidden=api.state().workspaces.length>0;
   $('spaces-count').textContent=String(api.state().workspaces.length);
   $('workspace-cards').replaceChildren(...matching.map(workspaceCard));
   $('home-empty').hidden=matching.length>0;
+  $('home-empty').querySelector('p').hidden=!(all.length&&!matching.length);
   if(api.state().workspaces.length && !matching.length){$('home-empty').querySelector('h3').textContent=onlyFavorites?(english?'No favorites yet.':'Noch keine Favoriten.'):api.t('noResults');$('home-empty').querySelector('p').textContent=onlyFavorites?(english?'Mark a workspace with the star to find it here.':'Markiere einen Arbeitsbereich mit dem Stern, um ihn hier wiederzufinden.'):api.t('noResultsHelp');}
   const library=templateLibrary(api.state(),api.language()),query=$('search').value.trim().toLocaleLowerCase();
   const filtered=library.filter(item=>`${item.name} ${item.description} ${item.tabs.map(tab=>`${tab.title} ${tab.url}`).join(' ')}`.toLocaleLowerCase().includes(query));
@@ -102,7 +103,6 @@ export function mountHub(api) {
   $('custom-grid').replaceChildren(...filtered.filter(item=>item.custom).map(templateCard));
   $('own-template-help').hidden=Boolean((api.state().templates??[]).length);
   $('template-no-results').hidden=filtered.length>0;
-  $('suggested-templates').replaceChildren(...library.filter(item=>!item.custom&&['starter:coding','starter:research','starter:printing'].includes(item.id)).map(templateCard));
   $('save-space-template').disabled=!api.workspace()||api.unavailable();
  }
  return { render,openWorkspace:workspace=>preview(workspace),openLibrary:()=>view('templates') };

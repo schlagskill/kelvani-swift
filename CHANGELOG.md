@@ -1,3 +1,12 @@
+## 0.6.1
+
+- Feste Navigation; Inhalt und Arbeitsbereich-Liste scrollen getrennt.
+- Übersicht ohne dauerhafte Einführung, mit kompakten Zahlen und Hilfe-Button.
+- Vorlagen in eigener Ansicht; Mehr-Menü und bedarfsabhängige Tab-Details.
+- Browser-Favicons für offene/gesicherte Tabs mit sauberem Ersatz bei Ladefehlern.
+- Lesbare Fenster-Nummern und Tab-Zähler in der offenen Liste.
+- Ansicht bleibt beim Neuladen über die Adresse erhalten.
+
 ## 0.6.0
 
 Eigenständiges 360px-Popup: Fenster sichern, suchen, wieder öffnen und große Ansicht aufrufen. Große Übersicht mit echten Bestandszahlen, Favoritenfilter und drei Sortierungen. K-Logo in Lila.
