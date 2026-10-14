@@ -1,3 +1,7 @@
+# 0.7.1
+
+Single tab capture and confirmation preview for large workspaces.
+
 ## 0.7.0
 
 - Neuer, zusammenhängender Produktstil nach einer dokumentierten Recherche mit 52 Quellen.
