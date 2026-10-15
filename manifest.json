@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "KelvaniSwift",
   "description": "Arbeitsbereiche für Browser-Tabs. Lokal sichern, wiederfinden und kontrolliert öffnen.",
-  "version": "0.7.1",
+  "version": "0.8.0",
   "permissions": [
     "storage",
     "tabs",
@@ -33,5 +33,6 @@
   "background": {
     "service_worker": "background.js",
     "type": "module"
-  }
+  },
+  "version_name": "0.8.0 Nachtentwicklung RC1"
 }
