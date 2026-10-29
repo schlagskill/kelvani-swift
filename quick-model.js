@@ -1,2 +1,9 @@
 export function visibleWorkspaces(workspaces,query='',limit=6){const q=query.trim().toLocaleLowerCase();return workspaces.filter(w=>!q||`${w.name} ${w.tabs.map(t=>`${t.title} ${t.url}`).join(' ')}`.toLocaleLowerCase().includes(q)).toSorted((a,b)=>Number(Boolean(b.favorite))-Number(Boolean(a.favorite))||Date.parse(b.updatedAt)-Date.parse(a.updatedAt)).slice(0,q?100:limit);}
-export function restoredMessage(result,en=false){const failed=result.failed?.length??0;return en?`${result.opened} opened · ${result.reused??0} reused${failed?` · ${failed} failed`:''}`:`${result.opened} geöffnet · ${result.reused??0} wiederverwendet${failed?` · ${failed} fehlgeschlagen`:''}`;}
+export function restoredMessage(result,en=false){
+ const failed=result.failed?.length??0;
+ const parts=en?[`${result.opened} opened`,`${result.reused??0} reused`]:[`${result.opened} geöffnet`,`${result.reused??0} wiederverwendet`];
+ if(failed)parts.push(en?`${failed} failed`:`${failed} fehlgeschlagen`);
+ if(result.pinFailures)parts.push(en?`${result.pinFailures} not pinned`:`${result.pinFailures} nicht angeheftet`);
+ if(result.focusFailed)parts.push(en?'Could not focus the tab':'Fokus konnte nicht gesetzt werden');
+ return parts.join(' · ');
+}
