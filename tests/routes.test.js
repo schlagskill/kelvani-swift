@@ -15,3 +15,13 @@ test("empty/current requests preserve the existing URL and current context", () 
   assert.equal(managerRoute(current, ""), current);
   assert.equal(requestedWorkspace(`${base}?workspace=legacy`), "legacy");
 });
+
+test("explicit workspace requests leave other views even when the query names that workspace", () => {
+ for (const view of ["home", "templates", "live"]) {
+  const current = `${base}?workspace=current#view=${view}`;
+  const next = managerRoute(current, "current");
+  assert.notEqual(next, current);
+  assert.equal(new URL(next).hash, "#workspace=current");
+  assert.equal(new URL(next).search, "?workspace=current");
+ }
+});

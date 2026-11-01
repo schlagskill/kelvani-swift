@@ -91,3 +91,21 @@ test("manager creation failures reach the UI without falling back to external we
   };
   await assert.rejects(openManager(browser), /denied/);
 });
+
+test("selecting the previous workspace switches a reused manager out of live view", async () => {
+ const calls=[];
+ const browser={
+  runtime:{getURL:()=>base},
+  tabs:{
+   query:async()=>[{id:4,windowId:9,url:`${base}?workspace=current#view=live`}],
+   update:async(...args)=>calls.push(args),
+   create:async()=>assert.fail("must reuse the existing manager"),
+  },
+  windows:{update:async(...args)=>calls.push(args)},
+ };
+ await openManager(browser,"current");
+ assert.deepEqual(calls,[
+  [4,{url:`${base}?workspace=current#workspace=current`,active:true}],
+  [9,{focused:true}],
+ ]);
+});

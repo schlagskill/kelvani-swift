@@ -6,9 +6,11 @@ export function requestedWorkspace(url) {
   );
 }
 export function managerRoute(currentUrl, workspaceId) {
-  if (!workspaceId || requestedWorkspace(currentUrl) === workspaceId)
-    return currentUrl;
+  if (!workspaceId) return currentUrl;
   const location = new URL(currentUrl);
+  const view = new URLSearchParams(location.hash.slice(1)).get("view");
+  if (requestedWorkspace(currentUrl) === workspaceId &&
+      !["home", "templates", "live"].includes(view)) return currentUrl;
   location.hash = new URLSearchParams({ workspace: workspaceId }).toString();
   return location.href;
 }
