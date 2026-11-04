@@ -11,7 +11,10 @@ export function validHistory(value){
 export function checkpoint(history,before,after,id,at){
  const old=validateState(before),next=validateState(after);
  if(JSON.stringify(old)===JSON.stringify(next))return validHistory(history);
- const result=[{id,at,state:old},...validHistory(history)].slice(0,12);
+ const entry={id,at,state:old},result=validHistory(history);
+ // An oversized new snapshot must not evict every existing recovery point.
+ if(new TextEncoder().encode(JSON.stringify([entry])).length<=MAX_HISTORY_BYTES)result.unshift(entry);
+ result.splice(12);
  while(result.length&&new TextEncoder().encode(JSON.stringify(result)).length>MAX_HISTORY_BYTES)result.pop();
  return result;
 }

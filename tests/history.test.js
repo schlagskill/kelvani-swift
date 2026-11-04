@@ -4,3 +4,17 @@ test('checkpoint preserves deleted workspace for recovery',()=>{const before={..
 test('identical states do not create checkpoints',()=>assert.deepEqual(checkpoint([],empty,empty,'a','2026-10-15T01:00:00Z'),[]));
 test('invalid history entries excluded',()=>assert.equal(validHistory([{id:'a',at:'bad',state:empty},{id:'b',at:'2026-10-15T00:00:00Z',state:{version:99}}]).length,0));
 test('checkpoint retains at most twelve and stale restore is explicit',()=>{let h=[];for(let i=0;i<20;i++)h=checkpoint(h,empty,{...empty,workspaces:[workspace]},String(i),'2026-10-15T00:00:00Z');assert.equal(h.length,12);assert.throws(()=>recoveryState(h,'0'));});
+
+test('an oversized checkpoint preserves earlier recovery points',()=>{
+ const huge={version:1,workspaces:Array.from({length:3},(_,i)=>({
+  ...workspace,id:String(i),tabs:Array.from({length:200},(_,n)=>({
+   title:'Tab',url:'https://example.com/'+n+'?data='+'x'.repeat(3000),pinned:false
+  }))
+ }))};
+ const previous=checkpoint([],empty,{...empty,workspaces:[workspace]},'older','2026-11-04T00:00:00Z');
+ const result=checkpoint(previous,huge,empty,'oversized','2026-11-04T01:00:00Z');
+ assert.deepEqual(result,previous);
+ assert.deepEqual(recoveryState(result,'older'),empty);
+ assert.ok(new TextEncoder().encode(JSON.stringify(result)).length<=1500000);
+});
+
