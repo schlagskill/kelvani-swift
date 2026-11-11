@@ -86,11 +86,21 @@ Die Tab-Wiederherstellung läuft im Erweiterungs-Hintergrund weiter, wenn das Po
 
 
 
+## Backup übertragen
+
+1. In der großen Swift-Ansicht die Einstellungen öffnen und das Backup als JSON-Datei exportieren.
+2. Im Zielprofil die Einstellungen öffnen, die JSON-Datei zum Import auswählen und die angezeigte Anzahl an Arbeitsbereichen und Vorlagen prüfen.
+3. Den Import bestätigen. Swift führt die Arbeitsbereiche und eigenen Vorlagen mit den vorhandenen Daten zusammen. Identische Einträge werden übersprungen. Bei abweichenden Einträgen mit derselben ID bleiben beide Fassungen erhalten. Im Zielprofil gelten weiterhin dessen Sprache und Darstellung.
+
+Der Export enthält gespeicherte Tab-Adressen und Titel, Arbeitsbereiche, eigene Vorlagen und Einstellungen. Die Datei eignet sich für die Übertragung zwischen Browserprofilen. Bewahre sie privat auf.
+
+Der Import akzeptiert bis zu 2 MiB (2.097.152 Byte) pro Datei. Bei einem besonders großen Bestand kann der Export diese Grenze überschreiten. Prüfe die Dateigröße, bevor du dich beim Wechsel des Browserprofils auf den Import verlässt.
+
 ## Datenschutz und Grenzen
 
 
 
-Nur `storage` und `tabs` werden benötigt. Keine Host-Berechtigungen, Telemetrie, Remote-Scripts, Remote-Schriften, Seiteninhalte oder Anmeldedaten. Alle Assets werden lokal geladen. Eine geöffnete Website wird erst beim bewussten Öffnen ihrer URL kontaktiert. Private, interne und unsichere URLs sowie eingebettete Zugangsdaten werden nicht gesichert.
+`storage` speichert Arbeitsbereiche und Einstellungen lokal. `tabs` erlaubt Swift, offene Tabs für die Sicherung auszulesen und gespeicherte Links zu öffnen. `favicon` lädt die Website-Symbole aus dem lokalen Browser-Cache. Keine Host-Berechtigungen, Telemetrie, Remote-Scripts, Remote-Schriften, Seiteninhalte oder Anmeldedaten. Alle Assets werden lokal geladen. Eine geöffnete Website wird erst beim bewussten Öffnen ihrer URL kontaktiert. Private, interne und unsichere URLs sowie eingebettete Zugangsdaten werden nicht gesichert.
 
 
 
@@ -98,7 +108,7 @@ Gespeichert werden URLs, Titel, Pins, Sicherungszeitpunkt, Fensterquelle, Bereic
 
 
 
-Maximal 100 Bereiche, je 200 unterschiedliche Web-Tabs, URLs bis 8192 Zeichen und Importdateien bis 2 MB. Kapazitäts- und Schreibfehler brechen Änderungen ab; Verschieben in einen vollen Bereich verliert keine Quell-Tabs. Import überspringt identische Bereiche; verschiedene Versionen mit gleicher ID bekommen eine eigene ID.
+Maximal 100 Bereiche, je 200 unterschiedliche Web-Tabs, URLs bis 8192 Zeichen und Importdateien bis 2 MiB. Kapazitäts- und Schreibfehler brechen Änderungen ab; Verschieben in einen vollen Bereich verliert keine Quell-Tabs. Import überspringt identische Bereiche; verschiedene Versionen mit gleicher ID bekommen eine eigene ID.
 
 
 
