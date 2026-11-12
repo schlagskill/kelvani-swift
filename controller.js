@@ -6,9 +6,9 @@ import {
   EMPTY,
   safeUrl,
   snapshot,
-  validateState,
   saveWorkspace,
   mergeBackup,
+  readBackupFile,
   filterWorkspaces,
   removeSavedTabs,
 } from "./core.js";
@@ -1205,7 +1205,7 @@ $("settings-form").onsubmit = (event) => {
 $("export").onclick = () =>
   run("export", $("export"), async () => {
     const latest = await load(),
-      blob = new Blob([JSON.stringify(latest, null, 2)], {
+      blob = new Blob([JSON.stringify(latest)], {
         type: "application/json",
       }),
       url = URL.createObjectURL(blob);
@@ -1222,8 +1222,7 @@ $("import").onchange = () =>
     const file = $("import").files[0];
     $("import").value = "";
     if (!file) return;
-    if (file.size > 2 * 1024 * 1024) throw new Error("Maximum: 2 MB");
-    const incoming = validateState(JSON.parse(await file.text()));
+    const incoming = await readBackupFile(file);
   const count = incoming.workspaces.length, templateCount = (incoming.templates??[]).length;
     $("settings-dialog").close();
     ask(

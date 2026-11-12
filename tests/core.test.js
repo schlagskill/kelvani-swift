@@ -83,3 +83,23 @@ test("malformed backup and blank name rejected", () => {
   assert.throws(() => validateState({ version: 2, workspaces: [] }));
   assert.throws(() => saveWorkspace(EMPTY, " ", tabs, "a", date));
 });
+
+test("large valid backups can be imported within the file size limit", async () => {
+  const {readBackupFile}=await import("../core.js");
+  const state={...EMPTY,workspaces:Array.from({length:3},(_,i)=>({
+    id:String(i),name:"Project "+i,updatedAt:"2026-11-12T00:00:00Z",
+    tabs:Array.from({length:200},(_,n)=>({
+      url:"https://example.com/"+n+"?data="+"x".repeat(4000),title:"Tab",pinned:false,
+    })),
+  }))};
+  const file=new Blob([JSON.stringify(state,null,2)]);
+  assert.ok(file.size>2*1024*1024);
+  assert.deepEqual(await readBackupFile(file),state);
+});
+test("oversized backups are rejected before reading their contents", async () => {
+  const {readBackupFile,MAX_BACKUP_BYTES}=await import("../core.js");
+  await assert.rejects(readBackupFile({
+    size:MAX_BACKUP_BYTES+1,
+    text:()=>assert.fail("oversized file must not be read"),
+  }),/12 MiB/);
+});

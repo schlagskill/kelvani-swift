@@ -94,7 +94,7 @@ Die Tab-Wiederherstellung läuft im Erweiterungs-Hintergrund weiter, wenn das Po
 
 Der Export enthält gespeicherte Tab-Adressen und Titel, Arbeitsbereiche, eigene Vorlagen und Einstellungen. Die Datei eignet sich für die Übertragung zwischen Browserprofilen. Bewahre sie privat auf.
 
-Der Import akzeptiert bis zu 2 MiB (2.097.152 Byte) pro Datei. Bei einem besonders großen Bestand kann der Export diese Grenze überschreiten. Prüfe die Dateigröße, bevor du dich beim Wechsel des Browserprofils auf den Import verlässt.
+Der Import akzeptiert bis zu 12 MiB (12.582.912 Byte) pro Datei. Bei einem besonders großen Bestand kann der Export diese Grenze überschreiten. Prüfe die Dateigröße, bevor du dich beim Wechsel des Browserprofils auf den Import verlässt.
 
 ## Datenschutz und Grenzen
 
@@ -108,7 +108,7 @@ Gespeichert werden URLs, Titel, Pins, Sicherungszeitpunkt, Fensterquelle, Bereic
 
 
 
-Maximal 100 Bereiche, je 200 unterschiedliche Web-Tabs, URLs bis 8192 Zeichen und Importdateien bis 2 MiB. Kapazitäts- und Schreibfehler brechen Änderungen ab; Verschieben in einen vollen Bereich verliert keine Quell-Tabs. Import überspringt identische Bereiche; verschiedene Versionen mit gleicher ID bekommen eine eigene ID.
+Maximal 100 Bereiche, je 200 unterschiedliche Web-Tabs, URLs bis 8192 Zeichen und Importdateien bis 12 MiB. Kapazitäts- und Schreibfehler brechen Änderungen ab; Verschieben in einen vollen Bereich verliert keine Quell-Tabs. Import überspringt identische Bereiche; verschiedene Versionen mit gleicher ID bekommen eine eigene ID.
 
 
 

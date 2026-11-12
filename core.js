@@ -198,3 +198,10 @@ export function removeSavedTabs(state, id, urls, expectedTabs) {
     ),
   });
 }
+
+export const MAX_BACKUP_BYTES = 12 * 1024 * 1024;
+
+export async function readBackupFile(file) {
+  if (file.size > MAX_BACKUP_BYTES) throw new Error("Maximum: 12 MiB");
+  return validateState(JSON.parse(await file.text()));
+}
