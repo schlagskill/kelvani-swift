@@ -166,3 +166,12 @@ test("unsafe, oversized, duplicate canonical URLs and unsupported settings are r
   );
   assert.throws(() => editWorkspace(state, "a", { color: "#javascript" }));
 });
+
+test("moving before a duplicate uses its original position in the target", () => {
+  const initial = createWorkspace(state, {
+    id: "target", name: "Target", tabs: [tab(5), tab(1), tab(6)],
+  });
+  const next = moveTabs(initial, "a", "target", [tab(1).url, tab(2).url], tab(1).url);
+  assert.deepEqual(next.workspaces.find(w => w.id === "target").tabs, [tab(5), tab(1), tab(2), tab(6)]);
+  assert.deepEqual(next.workspaces.find(w => w.id === "a").tabs, [tab(3)]);
+});

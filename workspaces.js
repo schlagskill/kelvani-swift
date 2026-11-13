@@ -91,12 +91,13 @@ export function moveTabs(
   if (moving.length !== chosen.size)
     throw new Error("Ein ausgewählter Tab wurde bereits geändert.");
   if (fromId === toId && chosen.has(beforeUrl)) return current;
-  const destination = to.tabs.filter((t) => !chosen.has(t.url));
-  const position =
-    beforeUrl === null
-      ? destination.length
-      : destination.findIndex((t) => t.url === beforeUrl);
-  if (position < 0) throw new Error("Das Ziel wurde bereits geändert.");
+  const anchorIndex = beforeUrl === null
+    ? to.tabs.length
+    : to.tabs.findIndex((tab) => tab.url === beforeUrl);
+  if (anchorIndex < 0) throw new Error("Das Ziel wurde bereits geändert.");
+  // A duplicate may itself be the drop target. Count surviving tabs before it.
+  const position = to.tabs.slice(0, anchorIndex).filter((tab) => !chosen.has(tab.url)).length;
+  const destination = to.tabs.filter((tab) => !chosen.has(tab.url));
   destination.splice(position, 0, ...moving);
   // Validate the complete transaction before any storage write. An overfull target never loses source tabs.
   return validateState({
