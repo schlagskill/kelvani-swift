@@ -1,3 +1,31 @@
+# KelvaniSwift — Tests ausführen
+
+Die folgenden Befehle im Stammordner dieses Repositorys ausführen. Voraussetzung ist Node.js 22 oder neuer; die Tests verwenden den eingebauten Node-Testläufer und Browser-API-Testdoubles. Eine Installation der Erweiterung ist dafür nicht erforderlich.
+
+```sh
+node --test tests/*.test.js
+```
+
+Für die Sicherungsvalidierung und das Verschieben gespeicherter Tabs gezielt:
+
+```sh
+node --test tests/core.test.js tests/workspaces.test.js
+```
+
+## Manuelle Regression vor einem Release
+
+Diese Schritte sind eine Prüfanleitung, kein Nachweis einer bereits bestandenen Browserprüfung. Mit separaten Test-Arbeitsbereichen durchführen.
+
+- **Einfügen vor einer doppelten Adresse:** Quelle mit den Adressen A, B, C und Ziel mit X, A, Y anlegen. A und B aus der Quelle vor A im Ziel verschieben. Erwartet werden X, A, B, Y im Ziel und C in der Quelle, ohne doppelte Adresse und ohne Fehlermeldung. Anschließend Rückgängig prüfen.
+- **Große Sicherung:** Einen gültigen Export über 2 MiB, aber höchstens 12 MiB importieren. Die Vorschau muss erscheinen; vor dem Übernehmen Anzahl und Inhalt prüfen. Eine Datei über 12 MiB muss abgewiesen werden und vorhandene Daten unverändert lassen. Die Dateigröße allein macht eine Sicherung nicht gültig; Struktur- und Mengenlimits gelten weiterhin.
+- **Veraltetes Ziel:** Den Ziel-Arbeitsbereich in einem zweiten Manager ändern, nachdem im ersten Manager Tabs ausgewählt wurden. Ein Verschieben mit veraltetem Stand darf die neueren Daten nicht überschreiben.
+
+Ein erfolgreicher Node-Lauf ersetzt diese Prüfungen in der installierten Chrome-/Edge-Erweiterung nicht. Auch vorhandene ZIP-Dateien werden durch einen Testlauf oder einen Quellcode-Commit nicht aktualisiert.
+
+## Historische Prüfberichte
+
+Die folgenden Ergebnisse gelten jeweils nur für den angegebenen damaligen Stand. Testzahlen, Berechtigungen und Paketprüfungen darin sind keine aktuellen Release-Zusagen.
+
 # Swift 0.7.0 — Neubau und Prüfung am 14.10.2026
 
 80 automatisierte Tests bestehen. HTML-IDs sind eindeutig und sämtliche lokalen Paketressourcen vorhanden.
